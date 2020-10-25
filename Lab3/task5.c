@@ -15,21 +15,86 @@ typedef struct Student
     int exam1, exam2, exam3, exam4, exam5;
 } Student;
 
-int comparator(Student *s1, Student *s2)
+int cmp_id(Student *s1, Student *s2)
 {
-    int tmp;
     if(s1->id != s2->id) {
         return s1->id - s2->id;
     }
+    return 0;
+}
+
+int cmp_nm(Student *s1, Student *s2)
+{
+    int tmp;
     tmp = strcmp(s1->name, s2->name);
     if(tmp != 0) {
         return tmp;
     }
+    return 0;
+}
+
+int cmp_srnm(Student *s1, Student *s2)
+{
+    int tmp;
     tmp = strcmp(s1->surname, s2->surname);
     if(tmp != 0) {
         return tmp;
     }
     return 0;
+}
+
+int search_id(Student *list, int count, int id)
+{
+    int i;
+    for (i = 0; i < count; i++)
+    {
+        if (id == list[i].id)
+        {
+            return i;
+        }
+        
+    }
+    return -1;
+}
+
+int search_nm(Student *list, int count, char *name)
+{
+    int i;
+    for (i = 0; i < count; i++)
+    {
+        if (strcmp(name, list[i].name) == 0)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int search_srnm(Student *list, int count, char *surname)
+{
+    int i;
+    for (i = 0; i < count; i++)
+    {
+        if (strcmp(surname, list[i].surname) == 0)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void group_print(Student *list, int count, int group)
+{
+    int i;
+    printf("Students of group %d:", group);
+    for (i = 0; i < count; i++)
+    {
+        if (group == list[i].group)
+        {
+            printf("%d %s %s %d ", list[i].id, list[i].name, list[i].surname, list[i].group);
+            printf("%d %d %d %d %d\n", list[i].exam1, list[i].exam2, list[i].exam3, list[i].exam4,  list[i].exam5);
+        }
+    }
 }
 
 int main(int argc, char **argv)
@@ -68,7 +133,9 @@ int main(int argc, char **argv)
     }
     fclose(fin);
 
-    qsort(list, count, sizeof(Student), comparator);
+    qsort(list, count, sizeof(Student), cmp_id);
+    // qsort(list, count, sizeof(Student), cmp_nm);
+    // qsort(list, count, sizeof(Student), cmp_srnm);
 
     FILE *fout;
     if(!(fout = fopen("output.txt", "w")))

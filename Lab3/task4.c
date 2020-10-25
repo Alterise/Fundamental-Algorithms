@@ -37,7 +37,7 @@ int main (int argc, char* argv[])
 
     while(1)
     {
-        scanf("%s", buf);
+        gets(buf);
         if (!strcmp(buf, argv[1]))
         {
             break;
@@ -50,7 +50,7 @@ int main (int argc, char* argv[])
         m.message = (char*)malloc(sizeof(char) * m.bytes);
         strcpy(m.message, buf);
 
-        fprintf(fOut, "%d %s %lu", m.id, m.message, m.bytes);
+        fprintf(fOut, "%d %lu %s", m.id, m.bytes, m.message);
 
         free(m.message);
 
@@ -65,12 +65,17 @@ int main (int argc, char* argv[])
 
     while (!feof(fOut))
     {
-        fscanf(fOut, "%d%s%lu", &id, bufMessage, &bytes);
+        fscanf(fOut, "%d%lu ", &id, &bytes);
+        fgets(bufMessage, BUFSIZ, fOut);
+        if(bufMessage[strlen(bufMessage) - 1] == '\n')
+        {
+            bufMessage[strlen(bufMessage) - 1] = '\0';
+        }
         messages = (PMessage)realloc(messages, ++messagesCount * sizeof(SMessage));
         messages[messagesCount - 1].id = id;
         messages[messagesCount - 1].bytes = bytes;
         // (messages + messagesCount - 1)->message = (char*)malloc(sizeof(char) * (strlen(bufMessage) + 1));
-        messages[messagesCount - 1].message = (char*)malloc(sizeof(char) * (strlen(bufMessage) + 1));
+        messages[messagesCount - 1].message = (char*)malloc(sizeof(char) * (strlen(bufMessage)));
         strcpy(messages[messagesCount - 1].message, bufMessage);
     }
     fclose(fOut);
