@@ -97,6 +97,24 @@ void group_print(Student *list, int count, int group)
     }
 }
 
+void print_above_avg(Student *list, int count)
+{
+    int i;
+    double sum = 0, avg;
+    for (i = 0; i < count; i++)
+    {
+        sum += (list[i].exam1 + list[i].exam2 + list[i].exam3 + list[i].exam4 + list[i].exam5) / 5;
+    }
+    avg = sum / count;
+    for (i = 0; i < count; i++)
+    {
+        if ((list[i].exam1 + list[i].exam2 + list[i].exam3 + list[i].exam4 + list[i].exam5) / 5 > avg)
+        {
+            printf("%s %s\n", list[i].name, list[i].surname);
+        }
+    }
+}
+
 int main(int argc, char **argv)
 {
     if(argc != 2)
