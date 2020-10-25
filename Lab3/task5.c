@@ -83,19 +83,54 @@ int search_srnm(Student *list, int count, char *surname)
     return -1;
 }
 
+void print_student(Student *list, int i)
+{
+    if(i < 0) printf("No student found\n");
+    else
+    {
+        printf("%d %s %s %d ", list[i].id, list[i].name, list[i].surname, list[i].group);
+        printf("%d %d %d %d %d\n", list[i].exam1, list[i].exam2, list[i].exam3, list[i].exam4,  list[i].exam5);
+    }
+}
+
+void fprint_student(Student *list, int i)
+{
+    FILE *fout;
+    if(!(fout = fopen("student.txt", "a")))
+    {
+        if(!(fout = fopen("student.txt", "w")))
+        {
+            printf("Can't open tracing file\n");
+            return;
+        }
+    }
+    
+    if(i < 0) 
+    {
+        fclose(fout);        
+        return;
+    }
+    else
+    {
+        fprintf(fout, "%s %s %d ", list[i].name, list[i].surname, list[i].group);
+        fprintf(fout, "%.2f\n", (list[i].exam1 + list[i].exam2 + list[i].exam3 + list[i].exam4 + list[i].exam5) / 5.0);
+    }
+    fclose(fout);
+}
+
 void group_print(Student *list, int count, int group)
 {
     int i;
-    printf("Students of group %d:", group);
+    printf("Students of group %d:\n", group);
     for (i = 0; i < count; i++)
     {
         if (group == list[i].group)
         {
-            printf("%d %s %s %d ", list[i].id, list[i].name, list[i].surname, list[i].group);
-            printf("%d %d %d %d %d\n", list[i].exam1, list[i].exam2, list[i].exam3, list[i].exam4,  list[i].exam5);
+            print_student(list, i);
         }
     }
 }
+
 
 void print_above_avg(Student *list, int count)
 {
@@ -103,12 +138,12 @@ void print_above_avg(Student *list, int count)
     double sum = 0, avg;
     for (i = 0; i < count; i++)
     {
-        sum += (list[i].exam1 + list[i].exam2 + list[i].exam3 + list[i].exam4 + list[i].exam5) / 5;
+        sum += (list[i].exam1 + list[i].exam2 + list[i].exam3 + list[i].exam4 + list[i].exam5) / 5.0;
     }
     avg = sum / count;
     for (i = 0; i < count; i++)
     {
-        if ((list[i].exam1 + list[i].exam2 + list[i].exam3 + list[i].exam4 + list[i].exam5) / 5 > avg)
+        if ((list[i].exam1 + list[i].exam2 + list[i].exam3 + list[i].exam4 + list[i].exam5) / 5.0 > avg)
         {
             printf("%s %s\n", list[i].name, list[i].surname);
         }
@@ -151,6 +186,19 @@ int main(int argc, char **argv)
     }
     fclose(fin);
 
+    print_student(list, search_id(list, count, 5));
+    print_student(list, search_nm(list, count, "Baaab"));
+    print_student(list, search_srnm(list, count, "Feaf"));
+    
+    fprint_student(list, search_id(list, count, 5));
+    fprint_student(list, search_nm(list, count, "Baaab"));
+    fprint_student(list, search_srnm(list, count, "Feaf"));
+
+    group_print(list, count, 5);
+    group_print(list, count, 8);
+
+    print_above_avg(list, count);
+
     qsort(list, count, sizeof(Student), cmp_id);
     // qsort(list, count, sizeof(Student), cmp_nm);
     // qsort(list, count, sizeof(Student), cmp_srnm);
@@ -171,13 +219,3 @@ int main(int argc, char **argv)
 
     fclose(fout);
 }
-
-// int main(int argc, char **argv)
-// {
-//     char str1[50], str2[50];
-//     strcpy(str1, "Fedar");
-//     strcpy(str2, "Fedaa");
-//     if(strcmp(str1, str2) < 0) printf("Bigger\n");
-//     else if(strcmp(str1, str2) > 0) printf("Smaller\n");
-//     else printf("Equal\n");
-// }
