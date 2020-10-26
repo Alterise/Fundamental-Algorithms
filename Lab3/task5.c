@@ -25,22 +25,12 @@ int cmp_id(Student *s1, Student *s2)
 
 int cmp_nm(Student *s1, Student *s2)
 {
-    int tmp;
-    tmp = strcmp(s1->name, s2->name);
-    if(tmp != 0) {
-        return tmp;
-    }
-    return 0;
+    return strcmp(s1->name, s2->name);
 }
 
 int cmp_srnm(Student *s1, Student *s2)
 {
-    int tmp;
-    tmp = strcmp(s1->surname, s2->surname);
-    if(tmp != 0) {
-        return tmp;
-    }
-    return 0;
+    return strcmp(s1->surname, s2->surname);
 }
 
 int search_id(Student *list, int count, int id)
@@ -204,7 +194,7 @@ int main(int argc, char **argv)
     // qsort(list, count, sizeof(Student), cmp_srnm);
 
     FILE *fout;
-    if(!(fout = fopen("output.txt", "w")))
+    if(!(fout = fopen("output5.txt", "w")))
     {
         perror("File opening error\n");
         exit(-6);
@@ -215,7 +205,12 @@ int main(int argc, char **argv)
     {
         fprintf(fout, "%d %s %s %d ", list[i].id, list[i].name, list[i].surname, list[i].group);
         fprintf(fout, "%d %d %d %d %d\n", list[i].exam1, list[i].exam2, list[i].exam3, list[i].exam4,  list[i].exam5);
+        free(list[i].name);
+        free(list[i].surname);
     }
+
+    free(list);
+
 
     fclose(fout);
 }

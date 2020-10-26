@@ -92,7 +92,7 @@ int main(int argc, char **argv)
     employee_qs(list, 0, count - 1);
 
     FILE *fout;
-    if(!(fout = fopen("output.txt", "w")))
+    if(!(fout = fopen("output3.txt", "w")))
     {
         perror("File opening error\n");
         exit(-6);
@@ -104,6 +104,8 @@ int main(int argc, char **argv)
         for(i = 0; i < count; i++)
         {
             fprintf(fout, "%d %s %s %.2lf\n", list[i].id, list[i].name, list[i].surname, list[i].salary);
+            free(list[i].name);
+            free(list[i].surname);
         }
     }
     else
@@ -111,8 +113,11 @@ int main(int argc, char **argv)
         for(i = count - 1; i >= 0; i--)
         {
             fprintf(fout, "%d %s %s %.2lf\n", list[i].id, list[i].name, list[i].surname, list[i].salary);
+            free(list[i].name);
+            free(list[i].surname);
         }
     }
     
+    free(list);
     fclose(fout);
 }

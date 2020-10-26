@@ -11,7 +11,7 @@ typedef struct Message
 
 int main (int argc, char* argv[])
 {
-    const char* outputFileName = "out.txt";
+    const char* outputFileName = "output4.txt";
     char buf[BUFSIZ];
     char bufMessage[BUFSIZ];
     SMessage m;
@@ -74,7 +74,6 @@ int main (int argc, char* argv[])
         messages = (PMessage)realloc(messages, ++messagesCount * sizeof(SMessage));
         messages[messagesCount - 1].id = id;
         messages[messagesCount - 1].bytes = bytes;
-        // (messages + messagesCount - 1)->message = (char*)malloc(sizeof(char) * (strlen(bufMessage) + 1));
         messages[messagesCount - 1].message = (char*)malloc(sizeof(char) * (strlen(bufMessage)));
         strcpy(messages[messagesCount - 1].message, bufMessage);
     }
