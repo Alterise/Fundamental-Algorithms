@@ -84,8 +84,40 @@ int main(int argc, char **argv)
     fclose(fin);
 
 
-    //TODO: Интерактивный диалог
-    shrink(list,1,&count);
+    int switcher;
+    while(1)
+    {
+        printf("\nMenu:\n");
+        printf("1 - Add flight\n");
+        printf("2 - Delete flight\n");
+        printf("3 - Print list\n");
+        printf("0 - STOP\n");
+        printf("\nInput: ");
+        scanf("%d", &switcher);
+        if (!switcher)
+        {
+            break;
+        }
+        else if (switcher == 1)
+        {
+            // TODO: ADD Flight
+        }
+        else if (switcher == 1)
+        {
+            // TODO: DEL Flight
+        }
+        else if (switcher == 1)
+        {
+            // TODO: PRINT Flights
+        }
+        else
+        {
+            printf("Wrong input. Try again\n");
+        }   
+    }
+
+
+    // shrink(list,1,&count);
 
     FILE *fout;
     if(!(fout = fopen(argv[1], "w")))
