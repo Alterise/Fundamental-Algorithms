@@ -83,7 +83,6 @@ int main(int argc, char **argv)
     }
     fclose(fin);
 
-
     int switcher;
     while(1)
     {
@@ -99,16 +98,55 @@ int main(int argc, char **argv)
             break;
         }
         else if (switcher == 1)
-        {
-            // TODO: ADD Flight
+        { 
+            printf("Input new flight:\n");
+            scanf("%d %s %s %s %s ", &num, dep_airport, dep_city, arr_airport, arr_city);
+            scanf("%d:%d:%d ", &dep_time.hours, &dep_time.minutes, &dep_time.seconds);
+            scanf("%d:%d:%d", &arr_time.hours, &arr_time.minutes, &arr_time.seconds);
+            list = (Flight*)realloc(list, ++count * sizeof(Flight));
+            list[count - 1].num = num;
+            list[count - 1].dep_airport = (char*)malloc(sizeof(char) * (strlen(dep_airport) + 1));
+            list[count - 1].dep_city = (char*)malloc(sizeof(char) * (strlen(dep_city) + 1));
+            list[count - 1].arr_airport = (char*)malloc(sizeof(char) * (strlen(arr_airport) + 1));
+            list[count - 1].arr_city = (char*)malloc(sizeof(char) * (strlen(arr_city) + 1));
+            strcpy(list[count - 1].dep_airport, dep_airport);
+            strcpy(list[count - 1].dep_city, dep_city);
+            strcpy(list[count - 1].arr_airport, arr_airport);
+            strcpy(list[count - 1].arr_city, arr_city);
+            list[count - 1].dep_time.hours = dep_time.hours;
+            list[count - 1].dep_time.minutes = dep_time.minutes;
+            list[count - 1].dep_time.seconds = dep_time.seconds;
+            list[count - 1].arr_time.hours = arr_time.hours;
+            list[count - 1].arr_time.minutes = arr_time.minutes;
+            list[count - 1].arr_time.seconds = arr_time.seconds;
         }
-        else if (switcher == 1)
+        else if (switcher == 2)
         {
-            // TODO: DEL Flight
+            printf("Input flight number: ");
+            int i, id;
+            scanf("%d", &id);
+            for(i = 0; i < count; i++)
+            {
+                if(id == list[i].num) break;
+            }
+            if (i == count)
+            {
+                printf("No flight with such number\n");
+            }
+            else shrink(list, i, &count);
+            
         }
-        else if (switcher == 1)
+        else if (switcher == 3)
         {
-            // TODO: PRINT Flights
+            int i;
+            printf("\nFlights:\n");
+            for (i = 0; i < count; i++)
+            {
+                printf("%d %s %s %s %s ", list[i].num, list[i].dep_airport, list[i].dep_city, list[i].arr_airport, list[i].arr_city);
+                printf("%02d:%02d:%02d ", list[i].dep_time.hours, list[i].dep_time.minutes, list[i].dep_time.seconds);
+                printf("%02d:%02d:%02d\n", list[i].arr_time.hours, list[i].arr_time.minutes, list[i].arr_time.seconds);
+            }
+            
         }
         else
         {
@@ -116,8 +154,6 @@ int main(int argc, char **argv)
         }   
     }
 
-
-    // shrink(list,1,&count);
 
     FILE *fout;
     if(!(fout = fopen(argv[1], "w")))
@@ -141,7 +177,7 @@ int main(int argc, char **argv)
         free(list[i].arr_airport);
         free(list[i].arr_city);
     }
-    free(list);
+    if(count) free(list);
 
     fclose(fout);
 }
