@@ -28,7 +28,6 @@ PString str_crt(char *str_src)
 
 int str_cmp(PString *str1, PString *str2)
 {
-    //TODO: cmp
     int i = 0, j = 0;
     while ((i < (*str1)->length) || (j < (*str2)->length))
     {
