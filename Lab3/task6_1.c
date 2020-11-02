@@ -29,26 +29,17 @@ PString str_crt(char *str_src)
 int str_cmp(PString *str1, PString *str2)
 {
     int i = 0, j = 0;
-    while ((i < (*str1)->length) || (j < (*str2)->length))
+    while ((i < (*str1)->length) && (i < (*str2)->length))
     {
-        if (i < j)
+        if ((*str1)->body[i] < (*str2)->body[i])
         {
             return -1;
         }
-        else if (i > j)
-        {
-            return 1;
-        }
-        else if ((*str1)->body[i] < (*str2)->body[j])
-        {
-            return -1;
-        }
-        else if ((*str1)->body[i] > (*str2)->body[j])
+        else if ((*str1)->body[i] > (*str2)->body[i])
         {
             return 1;
         }
         i++;
-        j++;
     }
     return 0;
 }
