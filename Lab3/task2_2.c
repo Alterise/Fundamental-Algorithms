@@ -14,7 +14,7 @@ int main()
     printf("Input l: ");
     scanf("%d", &l);
     k--;
-    if (l > k)
+    if (l - 1 > k)
     {
         perror("Wrong input");
         exit(-1);
