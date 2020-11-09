@@ -6,7 +6,7 @@
 #include <stdarg.h>
 #include <time.h>
 
-void recursive_search(int digit, int lb, int rb)
+int *recursive_search(int digit, int lb, int rb, int **arr, int *size)
 {
     if(rb == -1) return;
     int i;
@@ -14,13 +14,18 @@ void recursive_search(int digit, int lb, int rb)
     {
         digit &= ~(1 << i);
         digit |= 1 << i + 1;
-        printf("%d\n", digit);
-        recursive_search(digit, i, rb - 1);
+        (*size)++;
+        *arr = (int*)realloc(*arr, sizeof(int) * (*size));
+        (*arr)[(*size) - 1] = digit; 
+        recursive_search(digit, i, rb - 1, arr, size);
     }
+    return *arr;
 }
 
 int main()
 {
+    int *arr;
+    int size = 0;
     int k, l, digit;
     printf("Input k: ");
     scanf("%d", &k);
@@ -41,6 +46,13 @@ int main()
         digit |= 1 << i;
     }
     
-    printf("%d\n", digit);
-    recursive_search(digit, k - 1, l - 1);
+    size++;
+    arr = (int*)malloc(sizeof(int));
+    arr[0] = digit;
+    recursive_search(digit, k - 1, l - 1, &arr, &size);
+    for (i = 0; i < size; i++)
+    {
+        printf("%d\n", arr[i]);
+    }
+    free(arr);
 }
