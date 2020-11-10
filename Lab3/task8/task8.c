@@ -107,6 +107,7 @@ int main(int argc, char **argv)
             if(comm_stack)
             {
                 if(string_buff[i] == '}') comm_stack--;
+                else if(string_buff[i] == '{') comm_stack++;
                 continue;
             }
             if (string_buff[i] == '{')
