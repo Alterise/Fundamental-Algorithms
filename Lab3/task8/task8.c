@@ -24,7 +24,7 @@ char back_to_char(int a)
     return val;  
 }
 
-char *dec_to_base(int dec_digit, int base, char **str_digit)
+char *dec_to_base(int dec_digit, int base, char (*str_digit)[])
 {
     int i = 0, neg = 0;
     if(dec_digit < 0)
@@ -53,7 +53,7 @@ char *dec_to_base(int dec_digit, int base, char **str_digit)
     return (*str_digit);
 }
 
-int base_to_dec(char str_digit[BUFSIZ], int base)
+int base_to_dec(char str_digit[], int base)
 {
     int dec_digit = 0, i, length = strlen(str_digit), lb = 0, tmp = 1;
     if(str_digit[0] == '-') lb = 1;
@@ -65,6 +65,14 @@ int base_to_dec(char str_digit[BUFSIZ], int base)
     if(lb) return -dec_digit;
     return dec_digit;
 }
+
+
+int cmd_prc(char *cmd, int (*val_arr)[])
+{
+    // TODO: обработка команды
+    // printf("%s\n", cmd);
+}
+
 
 
 int main(int argc, char **argv)
@@ -116,9 +124,8 @@ int main(int argc, char **argv)
             }
             else if(string_buff[i] == ';')
             {
-                //TODO: обработка команды
                 comm_buff[j] = '\0';
-                printf("%s\n", comm_buff);
+                cmd_prc(comm_buff, &val_arr);
                 j = 0;
             }
             else if(string_buff[i] == '%') break;
@@ -151,10 +158,7 @@ int main(int argc, char **argv)
 //     scanf("%s", buff);
 //     int tmp = base_to_dec(buff, 10);
 //     printf("%d\n", tmp);
-//     // char buff2[BUFSIZ];
-//     char *buff2;
-//     buff2 = (char*)malloc(sizeof(char) * BUFSIZ);
+//     char buff2[BUFSIZ];
     
 //     printf("%s\n", dec_to_base(tmp, 11, &buff2));
-//     free(buff2);
 // }
