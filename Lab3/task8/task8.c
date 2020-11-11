@@ -24,7 +24,7 @@ char back_to_char(int a)
     return val;  
 }
 
-char *dec_to_base(int dec_digit, int base, char (*str_digit)[])
+char *dec_to_base(int dec_digit, int base, char (*str_digit)[BUFSIZ])
 {
     int i = 0, neg = 0;
     if(dec_digit < 0)
@@ -53,7 +53,7 @@ char *dec_to_base(int dec_digit, int base, char (*str_digit)[])
     return (*str_digit);
 }
 
-int base_to_dec(char str_digit[], int base)
+int base_to_dec(char str_digit[BUFSIZ], int base)
 {
     int dec_digit = 0, i, length = strlen(str_digit), lb = 0, tmp = 1;
     if(str_digit[0] == '-') lb = 1;
@@ -67,10 +67,79 @@ int base_to_dec(char str_digit[], int base)
 }
 
 
-int cmd_prc(char *cmd, int (*val_arr)[])
+int cmd_prc(char *cmd, int (*val_arr)[26][2])
 {
-    // TODO: обработка команды
-    // printf("%s\n", cmd);
+    int flag = 1, i;
+    int base;
+    char num[BUFSIZ];
+    char read_str[5] = "READ(";
+    char write_str[6] = "WRITE(";
+    for(i = 0; i < 5; i++)
+    {
+        if(cmd[i] != read_str[i]) flag = 0;
+    }
+    if(!flag)
+    {
+        flag = 2;
+        for(i = 0; i < 6; i++)
+        {
+            if(cmd[i] != write_str[i]) flag = 0;
+        }
+    }
+
+    if (cmd[0] > 'Z' || cmd[0] < 'A') return -1;
+    else
+    {
+        if(flag == 1)
+        {
+            if(!isalpha(cmd[5])) return -1;
+            if(cmd[6] != ',') return -1;
+            if(!isdigit(cmd[7])) return -1;
+            else base = cmd[7] - '0';
+            if(isdigit(cmd[8])) 
+            {
+                base = base * 10 + cmd[8] - '0';
+                if(cmd[9] != ')') return -1;
+                if(cmd[10] != '\0') return -2;
+            }
+            else 
+            {
+                if(cmd[8] != ')') return -1;
+                if(cmd[9] != '\0') return -2;
+            }
+            if(base < 2 || base > 36) return -3;
+            scanf("%s", num);
+            (*val_arr)[cmd[5] - 'A'][0] = base_to_dec(num, base);
+            (*val_arr)[cmd[5] - 'A'][1] = 1;
+        }
+        else if (flag == 2)
+        {
+            if(!isalpha(cmd[6])) return -1;
+            if(cmd[7] != ',') return -1;
+            if(!isdigit(cmd[8])) return -1;
+            else base = cmd[8] - '0';
+            if(isdigit(cmd[9])) 
+            {
+                base = base * 10 + cmd[9] - '0';
+                if(cmd[10] != ')') return -1;
+                if(cmd[11] != '\0') return -2;
+            }
+            else 
+            {
+                if(cmd[9] != ')') return -1;
+                if(cmd[10] != '\0') return -2;
+            }
+            if(base < 2 || base > 36) return -3;
+            if ((*val_arr)[cmd[6] - 'A'][1] != 1) return -4;
+            printf("%s\n", dec_to_base((*val_arr)[cmd[6] - 'A'][0], base, &num));
+        }
+        else
+        {
+            printf("\nOther commands\n");
+            // TODO: обработка команд не записи и не чтения
+        }
+        
+    }
 }
 
 
@@ -103,10 +172,15 @@ int main(int argc, char **argv)
         exit(-6);
     }
 
-    int val_arr[26];
+    int val_arr[26][2], error, i;
+    for (i = 0; i < 26; i++)
+    {
+        val_arr[i][1] = 0;
+    }
+    
 
     char string_buff[BUFSIZ], comm_buff[BUFSIZ];
-    int i, j = 0, comm_stack = 0;
+    int j = 0, comm_stack = 0;
 
     while (fgets(string_buff, BUFSIZ, fin))
     {
@@ -125,7 +199,47 @@ int main(int argc, char **argv)
             else if(string_buff[i] == ';')
             {
                 comm_buff[j] = '\0';
-                cmd_prc(comm_buff, &val_arr);
+                error = cmd_prc(comm_buff, &val_arr);
+                if(error == -1)
+                {
+                    perror("Wrong command");
+                    fclose(fin);
+                    if(argc == 4)
+                    {
+                        fclose(ftrace);
+                    }
+                    exit(-11);
+                }
+                else if(error == -2)
+                {
+                    perror("\';\' is missing");
+                    fclose(fin);
+                    if(argc == 4)
+                    {
+                        fclose(ftrace);
+                    }
+                    exit(-10);
+                }
+                else if(error == -3)
+                {
+                    perror("Wrong radix");
+                    fclose(fin);
+                    if(argc == 4)
+                    {
+                        fclose(ftrace);
+                    }
+                    exit(-10);
+                }
+                else if(error == -4)
+                {
+                    perror("Appeal to uninitialized variable");
+                    fclose(fin);
+                    if(argc == 4)
+                    {
+                        fclose(ftrace);
+                    }
+                    exit(-12);
+                }
                 j = 0;
             }
             else if(string_buff[i] == '%') break;
@@ -148,8 +262,6 @@ int main(int argc, char **argv)
         exit(-10);
     }
 }
-
-
 
 
 // int main(int argc, char **argv)
