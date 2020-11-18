@@ -41,7 +41,7 @@ typedef struct
     char *name;
     char *patronymic;
     date birth;
-    char sex;
+    char gender;
     double salary;
 } human;
 
@@ -117,8 +117,21 @@ void list_print(List *list)
     char str_tmp[11];
     while(tmp != NULL)
     {
-        printf("%s %s %s %s ", tmp->value.surname, tmp->value.name, tmp->value.patronymic, date_to_str(tmp->value.birth, &str_tmp));
-        printf("%c %.2lf\n", tmp->value.sex, tmp->value.salary);
+        printf("%s %s %s %s ", tmp->value.surname, tmp->value.name, tmp->value.patronymic, date_to_str(tmp->value.birth, str_tmp));
+        printf("%c %.2lf\n", tmp->value.gender, tmp->value.salary);
+        tmp = tmp->next;
+    }
+}
+
+void list_fprint(List *list, FILE *fout)
+{
+    pList_elem tmp = list->top;
+    char str_tmp[11];
+    while(tmp != NULL)
+    {
+        fprintf(fout ,"%s %s %s %s ", tmp->value.surname, tmp->value.name, tmp->value.patronymic, date_to_str(tmp->value.birth, str_tmp));
+        fprintf(fout ,"%c %.2lf", tmp->value.gender, tmp->value.salary);
+        if(tmp->next != NULL) fprintf(fout, "\n");
         tmp = tmp->next;
     }
 }
@@ -137,6 +150,142 @@ void list_clear(List *list)
     }
 }
 
+void lse_snm(List *list, char *surname)
+{
+    pList_elem tmp = list->top;
+    char str_tmp[11];
+    while(tmp != NULL)
+    {
+        if(!strcmp(surname, tmp->value.surname))
+        {
+            printf("%s %s %s %s ", tmp->value.surname, tmp->value.name, tmp->value.patronymic, date_to_str(tmp->value.birth, str_tmp));
+            printf("%c %.2lf\n", tmp->value.gender, tmp->value.salary);
+        }
+        tmp = tmp->next;
+    }
+}
+
+void lse_nm(List *list, char *name)
+{
+    pList_elem tmp = list->top;
+    char str_tmp[11];
+    while(tmp != NULL)
+    {
+        if(!strcmp(name, tmp->value.name))
+        {
+            printf("%s %s %s %s ", tmp->value.surname, tmp->value.name, tmp->value.patronymic, date_to_str(tmp->value.birth, str_tmp));
+            printf("%c %.2lf\n", tmp->value.gender, tmp->value.salary);
+        }
+        tmp = tmp->next;
+    }
+}
+
+void lse_pn(List *list, char *patronymic)
+{
+    pList_elem tmp = list->top;
+    char str_tmp[11];
+    while(tmp != NULL)
+    {
+        if(!strcmp(patronymic, tmp->value.patronymic))
+        {
+            printf("%s %s %s %s ", tmp->value.surname, tmp->value.name, tmp->value.patronymic, date_to_str(tmp->value.birth, str_tmp));
+            printf("%c %.2lf\n", tmp->value.gender, tmp->value.salary);
+        }
+        tmp = tmp->next;
+    }
+}
+
+void lse_sl(List *list, double salary)
+{
+    pList_elem tmp = list->top;
+    char str_tmp[11];
+    double E = 0.005;
+    while(tmp != NULL)
+    {
+        if(salary - E < tmp->value.salary && salary + E > tmp->value.salary)
+        {
+            printf("%s %s %s %s ", tmp->value.surname, tmp->value.name, tmp->value.patronymic, date_to_str(tmp->value.birth, str_tmp));
+            printf("%c %.2lf\n", tmp->value.gender, tmp->value.salary);
+        }
+        tmp = tmp->next;
+    }
+}
+
+void lse_dt(List *list, date birth)
+{
+    pList_elem tmp = list->top;
+    char str_tmp[11];
+    while(tmp != NULL)
+    {
+        if(birth.day == tmp->value.birth.day && birth.month == tmp->value.birth.month && birth.year == tmp->value.birth.year)
+        {
+            printf("%s %s %s %s ", tmp->value.surname, tmp->value.name, tmp->value.patronymic, date_to_str(tmp->value.birth, str_tmp));
+            printf("%c %.2lf\n", tmp->value.gender, tmp->value.salary);
+        }
+        tmp = tmp->next;
+    }
+}
+
+void lse_gn(List *list, char gender)
+{
+    pList_elem tmp = list->top;
+    char str_tmp[11];
+    while(tmp != NULL)
+    {
+        if(gender == tmp->value.gender)
+        {
+            printf("%s %s %s %s ", tmp->value.surname, tmp->value.name, tmp->value.patronymic, date_to_str(tmp->value.birth, str_tmp));
+            printf("%c %.2lf\n", tmp->value.gender, tmp->value.salary);
+        }
+        tmp = tmp->next;
+    }
+}
+
+void list_del(List *list, human value)
+{
+    if (list->top == NULL)
+    {
+        return;
+    }
+    else
+    {
+        pList_elem tmp = list->top;
+        double E = 0.005;
+        for(tmp; tmp != NULL; tmp = tmp->next)
+        {
+            if(strcmp(tmp->value.surname, value.surname)) continue;
+            if(strcmp(tmp->value.name, value.name)) continue;
+            if(strcmp(tmp->value.patronymic, value.patronymic)) continue;
+            if(!(value.birth.day == tmp->value.birth.day && value.birth.month == tmp->value.birth.month && value.birth.year == tmp->value.birth.year)) continue;
+            if(!(value.gender == tmp->value.gender)) continue;
+            if(!(value.salary - E < tmp->value.salary && value.salary + E > tmp->value.salary)) continue;
+            break;
+        }
+        if (tmp == NULL) return;
+        else if(tmp == list->top)
+        {
+            list->top = list->top->next;
+            free(tmp->value.surname);
+            free(tmp->value.name);
+            free(tmp->value.patronymic);
+            free(tmp);
+        }
+        else
+        {
+            pList_elem tmp_prev = list->top;
+            while(tmp_prev->next != tmp)
+            {
+                tmp_prev = tmp_prev->next;
+            }
+            tmp_prev->next = tmp->next;
+            free(tmp->value.surname);
+            free(tmp->value.name);
+            free(tmp->value.patronymic);
+            free(tmp);
+        }
+    }
+}
+
 int main()
 {
     FILE *fin;
@@ -146,7 +295,7 @@ int main()
         exit;
     }
 
-    int need_to_rewrite = 0;
+    int need_to_rewrite = 1;
     char date_str[11];
 
     List list;
@@ -156,7 +305,7 @@ int main()
     char surname[BUFSIZ], name[BUFSIZ], patronymic[BUFSIZ];
     while(!feof(fin))
     {
-        fscanf(fin, "%s %s %s %d.%d.%d %c %lf", surname, name, patronymic, &value.birth.day, &value.birth.month, &value.birth.year, &value.sex, &value.salary);
+        fscanf(fin, "%s %s %s %d.%d.%d %c %lf", surname, name, patronymic, &value.birth.day, &value.birth.month, &value.birth.year, &value.gender, &value.salary);
         value.surname = (char*)malloc(sizeof(char) * strlen(surname));
         strcpy(value.surname, surname);
         value.name = (char*)malloc(sizeof(char) * strlen(name));
@@ -170,9 +319,20 @@ int main()
     fclose(fin);
 
     list_print(&list);
-    list_clear(&list);
+    printf("\n");
+    lse_snm(&list, "Gagov");
+    printf("\n");
+    lse_sl(&list, 128.18);
+    printf("\n");
+    date dt_tmp = {20, 12, 1990};
+    lse_dt(&list, dt_tmp);
+    printf("\n");
 
+    date dt_tmp2 = {20, 12, 1997};
+    human h_tmp = {"Gagov", "Laled", "Gurovich", dt_tmp2, 'M', 952.12};
+    list_del(&list, h_tmp);
 
+    list_print(&list);
 
 
     if(need_to_rewrite)
@@ -180,9 +340,13 @@ int main()
         if(!(fin = fopen("input4.txt", "w")))
         {
             perror("File opening error (2)");
+            list_clear(&list);
             exit;
         }
-        // TODO: File rewriting
+        
+        list_fprint(&list, fin);
+
         fclose(fin);
     }
+    list_clear(&list);
 }
