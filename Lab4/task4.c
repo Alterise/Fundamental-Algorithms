@@ -104,7 +104,7 @@ void list_sorted_push(List *list, human value)
             }
             else
             {
-                elem->next = tmp->next;
+                elem->next = tmp;
                 tmp_prev->next = elem;
             }
         }
