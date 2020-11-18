@@ -333,7 +333,19 @@ int main()
     list_del(&list, h_tmp);
 
     list_print(&list);
+    printf("\n");
 
+    date dt_tmp3 = {18, 10, 2011};
+    human h_tmp2 = {.birth = dt_tmp3, .gender = 'F', .salary = 1252.12};
+    h_tmp2.surname = (char*)malloc(sizeof(char) * strlen(surname));
+    strcpy(h_tmp2.surname, "Kotat");
+    h_tmp2.name = (char*)malloc(sizeof(char) * strlen(name));
+    strcpy(h_tmp2.name, "Opearto");
+    h_tmp2.patronymic = (char*)malloc(sizeof(char) * strlen(patronymic));
+    strcpy(h_tmp2.patronymic, "Buchovich");
+    list_sorted_push(&list, h_tmp2);
+
+    list_print(&list);
 
     if(need_to_rewrite)
     {
