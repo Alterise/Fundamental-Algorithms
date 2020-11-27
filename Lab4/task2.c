@@ -23,92 +23,96 @@ int name_cmp(arr_elem *a, arr_elem *b)
     return strcmp(a->name, b->name);
 }
 
-int var_bin_search(var_arr varr, char name[BUFSIZ])
+int var_bin_search(var_arr *varr, char name[BUFSIZ])
 {
-    int lb = 0, rb = varr.size - 1;
-    while(lb <= rb)
+    int lb = 0, rb = varr->size - 1;
+    while(lb < rb)
     {
-        if(strcmp(varr.arr[(lb + rb) / 2].name, name) < 0) lb = ((lb + rb) / 2) + 1;
-        else if(strcmp(varr.arr[(lb + rb) / 2].name, name) > 0) rb = (lb + rb) / 2;
+        if(strcmp(varr->arr[(lb + rb) / 2].name, name) < 0) lb = (((lb + rb) / 2) + 1);
+        else if(strcmp(varr->arr[(lb + rb) / 2].name, name) > 0) rb = ((lb + rb) / 2);
         else return (lb + rb) / 2;
     }
-    return -1;
+    if(!strcmp(varr->arr[(lb + rb) / 2].name, name)) return (lb + rb) / 2;
+    else return -1;
 }
 
-int print_all(var_arr varr)
+int print_all(var_arr *varr)
 {
     int i;
     printf("Variables:\n");
-    for(i = 0; i < varr.size; i++)
+    for(i = 0; i < varr->size; i++)
     {
-        printf("%s: %d\n", varr.arr[i].name, varr.arr[i].val);
+        printf("%s: %d\n", varr->arr[i].name, varr->arr[i].val);
     }
     return 0;
 }
 
-int print(var_arr varr, char *name)
+int print(var_arr *varr, char *name)
 {
     int id = var_bin_search(varr, name);
     if(id < 0) return 2;
-    printf("Variable %s: %d\n", varr.arr[id].name, varr.arr[id].val);
+    printf("Variable %s: %d\n", varr->arr[id].name, varr->arr[id].val);
     return 0;
 }
 
-int val_int_assign(var_arr varr, char *name, int val)
+int val_int_assign(var_arr *varr, char *name, int val)
 {
     int id;
-    if(!varr.size) 
+    if(!varr->size) 
     {
-        varr.arr = (arr_elem*)malloc(sizeof(arr_elem));
-        varr.size++;
-        varr.arr[0].val = val;
-        varr.arr[0].name = (char*)malloc(sizeof(char) * (strlen(name) + 1));
-        strcpy(varr.arr[0].name, name);
+        varr->arr = (arr_elem*)malloc(sizeof(arr_elem));
+        varr->size++;
+        varr->arr[0].val = val;
+        varr->arr[0].name = (char*)malloc(sizeof(char) * (strlen(name) + 1));
+        strcpy(varr->arr[0].name, name);
     }
     else if((id = var_bin_search(varr, name)) > 0)
     {
-        varr.arr[id].val = val;
+        varr->arr[id].val = val;
     }
     else
     {
-        varr.size++;
-        varr.arr = (arr_elem*)realloc(varr.arr, sizeof(arr_elem) * varr.size);
-        varr.arr[varr.size - 1].val = val;
-        varr.arr[varr.size - 1].name = (char*)malloc(sizeof(char) * (strlen(name) + 1));
-        strcpy(varr.arr[varr.size - 1].name, name);
-        qsort(varr.arr, varr.size, sizeof(arr_elem), name_cmp);
+        varr->size++;
+        varr->arr = (arr_elem*)realloc(varr->arr, sizeof(arr_elem) * varr->size);
+        varr->arr[varr->size - 1].val = val;
+        varr->arr[varr->size - 1].name = (char*)malloc(sizeof(char) * (strlen(name) + 1));
+        strcpy(varr->arr[varr->size - 1].name, name);
+        qsort(varr->arr, varr->size, sizeof(arr_elem), name_cmp);
     }
     return 0;
 }
 
-int val_var_assign(var_arr varr, char *name, char *nmo1, char *nmo2, char opt)
+int val_var_assign(var_arr *varr, char *name, char *nmo1, char *nmo2, char opt)
 {
-    if((opt == '/' || opt == '%') && varr.arr[var_bin_search(varr, nmo2)].val == 0) return 1;
-    if(var_bin_search(varr, name) > 0)
+    int o1_val = varr->arr[var_bin_search(varr, nmo1)].val;
+    int o2_val = 0;
+    if(opt != '\0') o2_val = varr->arr[var_bin_search(varr, nmo2)].val;
+    if((opt == '/' || opt == '%') && o2_val == 0) return 1;
+    if(var_bin_search(varr, name) >= 0)
     {
-        if(opt == '+') varr.arr[varr.size - 1].val = varr.arr[var_bin_search(varr, nmo1)].val + varr.arr[var_bin_search(varr, nmo2)].val;
-        else if(opt == '-') varr.arr[varr.size - 1].val = varr.arr[var_bin_search(varr, nmo1)].val - varr.arr[var_bin_search(varr, nmo2)].val;
-        else if(opt == '*') varr.arr[varr.size - 1].val = varr.arr[var_bin_search(varr, nmo1)].val * varr.arr[var_bin_search(varr, nmo2)].val;
-        else if(opt == '/') varr.arr[varr.size - 1].val = varr.arr[var_bin_search(varr, nmo1)].val / varr.arr[var_bin_search(varr, nmo2)].val;
-        else if(opt == '%') varr.arr[varr.size - 1].val = varr.arr[var_bin_search(varr, nmo1)].val % varr.arr[var_bin_search(varr, nmo2)].val;
+        if(opt == '+') varr->arr[varr->size - 1].val = o1_val + o2_val;
+        else if(opt == '-') varr->arr[varr->size - 1].val = o1_val - o2_val;
+        else if(opt == '*') varr->arr[varr->size - 1].val = o1_val * o2_val;
+        else if(opt == '/') varr->arr[varr->size - 1].val = o1_val / o2_val;
+        else if(opt == '%') varr->arr[varr->size - 1].val = o1_val % o2_val;
     }
     else
     {
-        varr.size++;
-        varr.arr = (arr_elem*)realloc(varr.arr, sizeof(arr_elem) * varr.size);
-        if(opt == '+') varr.arr[varr.size - 1].val = varr.arr[var_bin_search(varr, nmo1)].val + varr.arr[var_bin_search(varr, nmo2)].val;
-        else if(opt == '-') varr.arr[varr.size - 1].val = varr.arr[var_bin_search(varr, nmo1)].val - varr.arr[var_bin_search(varr, nmo2)].val;
-        else if(opt == '*') varr.arr[varr.size - 1].val = varr.arr[var_bin_search(varr, nmo1)].val * varr.arr[var_bin_search(varr, nmo2)].val;
-        else if(opt == '/') varr.arr[varr.size - 1].val = varr.arr[var_bin_search(varr, nmo1)].val / varr.arr[var_bin_search(varr, nmo2)].val;
-        else if(opt == '%') varr.arr[varr.size - 1].val = varr.arr[var_bin_search(varr, nmo1)].val % varr.arr[var_bin_search(varr, nmo2)].val;
-        varr.arr[varr.size - 1].name = (char*)malloc(sizeof(char) * (strlen(name) + 1));
-        strcpy(varr.arr[varr.size - 1].name, name);
-        qsort(varr.arr, varr.size, sizeof(arr_elem), name_cmp);
+        varr->size++;
+        varr->arr = (arr_elem*)realloc(varr->arr, sizeof(arr_elem) * varr->size);
+        if(opt == '+') varr->arr[varr->size - 1].val = o1_val + o2_val;
+        else if(opt == '-') varr->arr[varr->size - 1].val = o1_val - o2_val;
+        else if(opt == '*') varr->arr[varr->size - 1].val = o1_val * o2_val;
+        else if(opt == '/') varr->arr[varr->size - 1].val = o1_val / o2_val;
+        else if(opt == '%') varr->arr[varr->size - 1].val = o1_val % o2_val;
+        varr->arr[varr->size - 1].name = (char*)malloc(sizeof(char) * (strlen(name) + 1));
+        strcpy(varr->arr[varr->size - 1].name, name);
+        qsort(varr->arr, varr->size, sizeof(arr_elem), name_cmp);
     }
     return 0;
 }
 
-int cmd_prc(char *cmd, var_arr varr)
+int cmd_prc(char *cmd, var_arr *varr)
 {
     int i = 0, j;
     char buff[BUFSIZ];
@@ -146,7 +150,7 @@ int cmd_prc(char *cmd, var_arr varr)
         }
         buffV[i] = '\0';
         i++;
-        if(isdigit(cmd[i] || cmd[i] == '-'))
+        if(isdigit(cmd[i]) || cmd[i] == '-')
         {
             int val = 0, is_neg = 0;
             while(cmd[i] != '\0')
@@ -158,6 +162,7 @@ int cmd_prc(char *cmd, var_arr varr)
                     continue;
                 }
                 val = val * 10 + (cmd[i] - '0');
+                i++;
             }
             return val_int_assign(varr, buffV, val);
         }
@@ -172,6 +177,8 @@ int cmd_prc(char *cmd, var_arr varr)
                 j++;
             }
             opt = cmd[i++];
+            if(opt == '\0') val_var_assign(varr, buffV, buffo1, NULL, opt);
+            j = 0;
             while(isalpha(cmd[i]))
             {
                 buffo2[j] = cmd[i];
@@ -214,7 +221,7 @@ int main(int argc, char **argv)
             {
                 comm_buff[j] = '\0';
                 j = 0;
-                to_do = cmd_prc(comm_buff, varr);
+                to_do = cmd_prc(comm_buff, &varr);
                 step_counter++;
                 if(to_do)
                 {
