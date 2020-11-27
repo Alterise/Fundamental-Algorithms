@@ -438,143 +438,146 @@ int main(int argc, char **argv)
                 j = 0;
                 to_do = cmd_prc(comm_buff, var);
                 step_counter++;
-                if(to_do == 10)
+                if(to_do)
                 {
-                    printf("Function LOAD fail (Array isn't empty) [Command № %d]\n", step_counter);
-                    fclose(fin);
-                    exit(10);
-                }
-                else if(to_do == 11)
-                {
-                    printf("Function LOAD fail (File opening error) [Command № %d]\n", step_counter);
-                    fclose(fin);
-                    exit(11);
-                }
-                else if(to_do == 12)
-                {
-                    printf("Function LOAD fail (Wrong input) [Command № %d]\n", step_counter);
-                    fclose(fin);
-                    exit(11);
-                }
-                else if(to_do == 20)
-                {
-                    printf("Function SAVE fail (Array is empty) [Command № %d]\n", step_counter);
-                    fclose(fin);
-                    exit(20);
-                }
-                else if(to_do == 21)
-                {
-                    printf("Function SAVE fail (File opening error) [Command № %d]\n", step_counter);
-                    fclose(fin);
-                    exit(21);
-                }
-                else if(to_do == 30)
-                {
-                    printf("Function RAND fail (Array isn't empty) [Command № %d]\n", step_counter);
-                    fclose(fin);
-                    exit(30);
-                }
-                else if(to_do == 40)
-                {
-                    printf("Function CONC fail (1st array is empty) [Command № %d]\n", step_counter);
-                    fclose(fin);
-                    exit(40);
-                }
-                else if(to_do == 41)
-                {
-                    printf("Function CONC fail (2nd array is empty) [Command № %d]\n", step_counter);
-                    fclose(fin);
-                    exit(41);
-                }
-                else if(to_do == 50)
-                {
-                    printf("Function FREE fail (Array is empty) [Command № %d]\n", step_counter);
-                    fclose(fin);
-                    exit(50);
-                }
-                else if(to_do == 60)
-                {
-                    printf("Function REMOVE fail (Array is empty) [Command № %d]\n", step_counter);
-                    fclose(fin);
-                    exit(60);
-                }
-                else if(to_do == 61)
-                {
-                    printf("Function REMOVE fail (Invalid ID of start element) [Command № %d]\n", step_counter);
-                    fclose(fin);
-                    exit(61);
-                }
-                else if(to_do == 62)
-                {
-                    printf("Function REMOVE fail (Invalid ID of end element) [Command № %d]\n", step_counter);
-                    fclose(fin);
-                    exit(62);
-                }
-                else if(to_do == 70)
-                {
-                    printf("Function COPY fail (1st array is empty) [Command № %d]\n", step_counter);
-                    fclose(fin);
-                    exit(70);
-                }
-                else if(to_do == 71)
-                {
-                    printf("Function COPY fail (2st array isn't empty) [Command № %d]\n", step_counter);
-                    fclose(fin);
-                    exit(71);
-                }
-                else if(to_do == 72)
-                {
-                    printf("Function COPY fail (Invalid ID of start element) [Command № %d]\n", step_counter);
-                    fclose(fin);
-                    exit(72);
-                }
-                else if(to_do == 73)
-                {
-                    printf("Function COPY fail (Invalid ID of end element) [Command № %d]\n", step_counter);
-                    fclose(fin);
-                    exit(73);
-                }
-                else if(to_do == 80)
-                {
-                    printf("Function SORT fail (Array is empty) [Command № %d]\n", step_counter);
-                    fclose(fin);
-                    exit(80);
-                }
-                else if(to_do == 90)
-                {
-                    printf("Function PERMUTATION fail (Array is empty) [Command № %d]\n", step_counter);
-                    fclose(fin);
-                    exit(90);
-                }
-                else if(to_do == 100)
-                {
-                    printf("Function STAT fail (Array is empty) [Command № %d]\n", step_counter);
-                    fclose(fin);
-                    exit(100);
-                }
-                else if(to_do == 110)
-                {
-                    printf("Function PRINT fail (Array is empty) [Command № %d]\n", step_counter);
-                    fclose(fin);
-                    exit(110);
-                }
-                else if(to_do == 111)
-                {
-                    printf("Function PRINT fail (Invalid ID of start element) [Command № %d]\n", step_counter);
-                    fclose(fin);
-                    exit(111);
-                }
-                else if(to_do == 112)
-                {
-                    printf("Function PRINT fail (Invalid ID of end element) [Command № %d]\n", step_counter);
-                    fclose(fin);
-                    exit(112);
-                }
-                else if(to_do == 120)
-                {
-                    printf("Function PRINT_ALL fail (Array is empty) [Command № %d]\n", step_counter);
-                    fclose(fin);
-                    exit(120);
+                    if(to_do == 10)
+                    {
+                        printf("Function LOAD fail (Array isn't empty) [Command № %d]\n", step_counter);
+                        fclose(fin);
+                        exit(10);
+                    }
+                    else if(to_do == 11)
+                    {
+                        printf("Function LOAD fail (File opening error) [Command № %d]\n", step_counter);
+                        fclose(fin);
+                        exit(11);
+                    }
+                    else if(to_do == 12)
+                    {
+                        printf("Function LOAD fail (Wrong input) [Command № %d]\n", step_counter);
+                        fclose(fin);
+                        exit(11);
+                    }
+                    else if(to_do == 20)
+                    {
+                        printf("Function SAVE fail (Array is empty) [Command № %d]\n", step_counter);
+                        fclose(fin);
+                        exit(20);
+                    }
+                    else if(to_do == 21)
+                    {
+                        printf("Function SAVE fail (File opening error) [Command № %d]\n", step_counter);
+                        fclose(fin);
+                        exit(21);
+                    }
+                    else if(to_do == 30)
+                    {
+                        printf("Function RAND fail (Array isn't empty) [Command № %d]\n", step_counter);
+                        fclose(fin);
+                        exit(30);
+                    }
+                    else if(to_do == 40)
+                    {
+                        printf("Function CONC fail (1st array is empty) [Command № %d]\n", step_counter);
+                        fclose(fin);
+                        exit(40);
+                    }
+                    else if(to_do == 41)
+                    {
+                        printf("Function CONC fail (2nd array is empty) [Command № %d]\n", step_counter);
+                        fclose(fin);
+                        exit(41);
+                    }
+                    else if(to_do == 50)
+                    {
+                        printf("Function FREE fail (Array is empty) [Command № %d]\n", step_counter);
+                        fclose(fin);
+                        exit(50);
+                    }
+                    else if(to_do == 60)
+                    {
+                        printf("Function REMOVE fail (Array is empty) [Command № %d]\n", step_counter);
+                        fclose(fin);
+                        exit(60);
+                    }
+                    else if(to_do == 61)
+                    {
+                        printf("Function REMOVE fail (Invalid ID of start element) [Command № %d]\n", step_counter);
+                        fclose(fin);
+                        exit(61);
+                    }
+                    else if(to_do == 62)
+                    {
+                        printf("Function REMOVE fail (Invalid ID of end element) [Command № %d]\n", step_counter);
+                        fclose(fin);
+                        exit(62);
+                    }
+                    else if(to_do == 70)
+                    {
+                        printf("Function COPY fail (1st array is empty) [Command № %d]\n", step_counter);
+                        fclose(fin);
+                        exit(70);
+                    }
+                    else if(to_do == 71)
+                    {
+                        printf("Function COPY fail (2st array isn't empty) [Command № %d]\n", step_counter);
+                        fclose(fin);
+                        exit(71);
+                    }
+                    else if(to_do == 72)
+                    {
+                        printf("Function COPY fail (Invalid ID of start element) [Command № %d]\n", step_counter);
+                        fclose(fin);
+                        exit(72);
+                    }
+                    else if(to_do == 73)
+                    {
+                        printf("Function COPY fail (Invalid ID of end element) [Command № %d]\n", step_counter);
+                        fclose(fin);
+                        exit(73);
+                    }
+                    else if(to_do == 80)
+                    {
+                        printf("Function SORT fail (Array is empty) [Command № %d]\n", step_counter);
+                        fclose(fin);
+                        exit(80);
+                    }
+                    else if(to_do == 90)
+                    {
+                        printf("Function PERMUTATION fail (Array is empty) [Command № %d]\n", step_counter);
+                        fclose(fin);
+                        exit(90);
+                    }
+                    else if(to_do == 100)
+                    {
+                        printf("Function STAT fail (Array is empty) [Command № %d]\n", step_counter);
+                        fclose(fin);
+                        exit(100);
+                    }
+                    else if(to_do == 110)
+                    {
+                        printf("Function PRINT fail (Array is empty) [Command № %d]\n", step_counter);
+                        fclose(fin);
+                        exit(110);
+                    }
+                    else if(to_do == 111)
+                    {
+                        printf("Function PRINT fail (Invalid ID of start element) [Command № %d]\n", step_counter);
+                        fclose(fin);
+                        exit(111);
+                    }
+                    else if(to_do == 112)
+                    {
+                        printf("Function PRINT fail (Invalid ID of end element) [Command № %d]\n", step_counter);
+                        fclose(fin);
+                        exit(112);
+                    }
+                    else if(to_do == 120)
+                    {
+                        printf("Function PRINT_ALL fail (Array is empty) [Command № %d]\n", step_counter);
+                        fclose(fin);
+                        exit(120);
+                    }
                 }
             }
             else if(string_buff[i] != '\n') 
