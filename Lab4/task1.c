@@ -92,8 +92,8 @@ int cmd_free(var_elem var[26], int arr_num)
 int cmd_remove(var_elem var[26], int arr_num, int st_elem, int count)
 {
     if(var[arr_num].size == 0) return 60;
-    if(st_elem >= var[arr_num].size) return 62;
-    if((st_elem + count) >= var[arr_num].size) return 63;
+    if(st_elem >= var[arr_num].size) return 61;
+    if((st_elem + count) >= var[arr_num].size) return 62;
     int i;
     for(i = st_elem; i < var[arr_num].size - count; i++)
     {
@@ -408,9 +408,7 @@ int main(int argc, char **argv)
     for (i = 0; i < 26; i++)
     {
         var[i].size = 0;
-    }
-    cmd_load(var, 'A', "input1a.txt");
-    
+    }    
 
     char string_buff[BUFSIZ], comm_buff[BUFSIZ];
     int j = 0, step_counter = 0;
@@ -437,126 +435,132 @@ int main(int argc, char **argv)
                     fclose(fin);
                     exit(11);
                 }
-                // else if(to_do == 11)
-                // {
-                //     printf("Function LOAD fail (File opening error) [Command № %d]\n", step_counter);
-                //     fclose(fin);
-                //     exit(11);
-                // }
-                // else if(to_do == 11)
-                // {
-                //     printf("Function LOAD fail (File opening error) [Command № %d]\n", step_counter);
-                //     fclose(fin);
-                //     exit(11);
-                // }
-                // else if(to_do == 11)
-                // {
-                //     printf("Function LOAD fail (File opening error) [Command № %d]\n", step_counter);
-                //     fclose(fin);
-                //     exit(11);
-                // }
-                // else if(to_do == 11)
-                // {
-                //     printf("Function LOAD fail (File opening error) [Command № %d]\n", step_counter);
-                //     fclose(fin);
-                //     exit(11);
-                // }
-                // else if(to_do == 11)
-                // {
-                //     printf("Function LOAD fail (File opening error) [Command № %d]\n", step_counter);
-                //     fclose(fin);
-                //     exit(11);
-                // }
-                // else if(to_do == 11)
-                // {
-                //     printf("Function LOAD fail (File opening error) [Command № %d]\n", step_counter);
-                //     fclose(fin);
-                //     exit(11);
-                // }
-                // else if(to_do == 11)
-                // {
-                //     printf("Function LOAD fail (File opening error) [Command № %d]\n", step_counter);
-                //     fclose(fin);
-                //     exit(11);
-                // }
-                // else if(to_do == 11)
-                // {
-                //     printf("Function LOAD fail (File opening error) [Command № %d]\n", step_counter);
-                //     fclose(fin);
-                //     exit(11);
-                // }
-                // else if(to_do == 11)
-                // {
-                //     printf("Function LOAD fail (File opening error) [Command № %d]\n", step_counter);
-                //     fclose(fin);
-                //     exit(11);
-                // }
-                // else if(to_do == 11)
-                // {
-                //     printf("Function LOAD fail (File opening error) [Command № %d]\n", step_counter);
-                //     fclose(fin);
-                //     exit(11);
-                // }
-                // else if(to_do == 11)
-                // {
-                //     printf("Function LOAD fail (File opening error) [Command № %d]\n", step_counter);
-                //     fclose(fin);
-                //     exit(11);
-                // }
-                // else if(to_do == 11)
-                // {
-                //     printf("Function LOAD fail (File opening error) [Command № %d]\n", step_counter);
-                //     fclose(fin);
-                //     exit(11);
-                // }
-                // else if(to_do == 11)
-                // {
-                //     printf("Function LOAD fail (File opening error) [Command № %d]\n", step_counter);
-                //     fclose(fin);
-                //     exit(11);
-                // }
-                // else if(to_do == 11)
-                // {
-                //     printf("Function LOAD fail (File opening error) [Command № %d]\n", step_counter);
-                //     fclose(fin);
-                //     exit(11);
-                // }
-                // else if(to_do == 11)
-                // {
-                //     printf("Function LOAD fail (File opening error) [Command № %d]\n", step_counter);
-                //     fclose(fin);
-                //     exit(11);
-                // }
-                // else if(to_do == 11)
-                // {
-                //     printf("Function LOAD fail (File opening error) [Command № %d]\n", step_counter);
-                //     fclose(fin);
-                //     exit(11);
-                // }
-                // else if(to_do == 11)
-                // {
-                //     printf("Function LOAD fail (File opening error) [Command № %d]\n", step_counter);
-                //     fclose(fin);
-                //     exit(11);
-                // }
-                // else if(to_do == 11)
-                // {
-                //     printf("Function LOAD fail (File opening error) [Command № %d]\n", step_counter);
-                //     fclose(fin);
-                //     exit(11);
-                // }
-                // else if(to_do == 11)
-                // {
-                //     printf("Function LOAD fail (File opening error) [Command № %d]\n", step_counter);
-                //     fclose(fin);
-                //     exit(11);
-                // }
-                // else if(to_do == 11)
-                // {
-                //     printf("Function LOAD fail (File opening error) [Command № %d]\n", step_counter);
-                //     fclose(fin);
-                //     exit(11);
-                // }
+                else if(to_do == 12)
+                {
+                    printf("Function LOAD fail (Wrong input) [Command № %d]\n", step_counter);
+                    fclose(fin);
+                    exit(11);
+                }
+                else if(to_do == 20)
+                {
+                    printf("Function SAVE fail (Array is empty) [Command № %d]\n", step_counter);
+                    fclose(fin);
+                    exit(20);
+                }
+                else if(to_do == 21)
+                {
+                    printf("Function SAVE fail (File opening error) [Command № %d]\n", step_counter);
+                    fclose(fin);
+                    exit(21);
+                }
+                else if(to_do == 30)
+                {
+                    printf("Function RAND fail (Array isn't empty) [Command № %d]\n", step_counter);
+                    fclose(fin);
+                    exit(30);
+                }
+                else if(to_do == 40)
+                {
+                    printf("Function CONC fail (1st array is empty) [Command № %d]\n", step_counter);
+                    fclose(fin);
+                    exit(40);
+                }
+                else if(to_do == 41)
+                {
+                    printf("Function CONC fail (2nd array is empty) [Command № %d]\n", step_counter);
+                    fclose(fin);
+                    exit(41);
+                }
+                else if(to_do == 50)
+                {
+                    printf("Function FREE fail (Array is empty) [Command № %d]\n", step_counter);
+                    fclose(fin);
+                    exit(50);
+                }
+                else if(to_do == 60)
+                {
+                    printf("Function REMOVE fail (Array is empty) [Command № %d]\n", step_counter);
+                    fclose(fin);
+                    exit(60);
+                }
+                else if(to_do == 61)
+                {
+                    printf("Function REMOVE fail (Invalid ID of start element) [Command № %d]\n", step_counter);
+                    fclose(fin);
+                    exit(61);
+                }
+                else if(to_do == 62)
+                {
+                    printf("Function REMOVE fail (Invalid ID of end element) [Command № %d]\n", step_counter);
+                    fclose(fin);
+                    exit(62);
+                }
+                else if(to_do == 70)
+                {
+                    printf("Function COPY fail (1st array is empty) [Command № %d]\n", step_counter);
+                    fclose(fin);
+                    exit(70);
+                }
+                else if(to_do == 71)
+                {
+                    printf("Function COPY fail (2st array isn't empty) [Command № %d]\n", step_counter);
+                    fclose(fin);
+                    exit(71);
+                }
+                else if(to_do == 72)
+                {
+                    printf("Function COPY fail (Invalid ID of start element) [Command № %d]\n", step_counter);
+                    fclose(fin);
+                    exit(72);
+                }
+                else if(to_do == 73)
+                {
+                    printf("Function COPY fail (Invalid ID of end element) [Command № %d]\n", step_counter);
+                    fclose(fin);
+                    exit(73);
+                }
+                else if(to_do == 80)
+                {
+                    printf("Function SORT fail (Array is empty) [Command № %d]\n", step_counter);
+                    fclose(fin);
+                    exit(80);
+                }
+                else if(to_do == 90)
+                {
+                    printf("Function PERMUTATION fail (Array is empty) [Command № %d]\n", step_counter);
+                    fclose(fin);
+                    exit(90);
+                }
+                else if(to_do == 100)
+                {
+                    printf("Function STAT fail (Array is empty) [Command № %d]\n", step_counter);
+                    fclose(fin);
+                    exit(100);
+                }
+                else if(to_do == 110)
+                {
+                    printf("Function PRINT fail (Array is empty) [Command № %d]\n", step_counter);
+                    fclose(fin);
+                    exit(110);
+                }
+                else if(to_do == 111)
+                {
+                    printf("Function PRINT fail (Invalid ID of start element) [Command № %d]\n", step_counter);
+                    fclose(fin);
+                    exit(111);
+                }
+                else if(to_do == 112)
+                {
+                    printf("Function PRINT fail (Invalid ID of end element) [Command № %d]\n", step_counter);
+                    fclose(fin);
+                    exit(112);
+                }
+                else if(to_do == 120)
+                {
+                    printf("Function PRINT_ALL fail (Array is empty) [Command № %d]\n", step_counter);
+                    fclose(fin);
+                    exit(120);
+                }
             }
             else if(string_buff[i] != '\n') 
             {
