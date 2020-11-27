@@ -66,7 +66,7 @@ int val_int_assign(var_arr *varr, char *name, int val)
         varr->arr[0].name = (char*)malloc(sizeof(char) * (strlen(name) + 1));
         strcpy(varr->arr[0].name, name);
     }
-    else if((id = var_bin_search(varr, name)) > 0)
+    else if((id = var_bin_search(varr, name)) >= 0)
     {
         varr->arr[id].val = val;
     }
@@ -84,9 +84,15 @@ int val_int_assign(var_arr *varr, char *name, int val)
 
 int val_var_assign(var_arr *varr, char *name, char *nmo1, char *nmo2, char opt)
 {
-    int o1_val = varr->arr[var_bin_search(varr, nmo1)].val;
+    int id_o1 = var_bin_search(varr, nmo1);
+    if(id_o1 < 0) return 2;
+    int id_o2 = -1;
+    if(nmo2 != NULL) id_o2 = var_bin_search(varr, nmo2);
+    if(id_o2 < 0) return 2;
+    var_bin_search(varr, nmo1);
+    int o1_val = varr->arr[id_o1].val;
     int o2_val = 0, id;
-    if(opt != '\0') o2_val = varr->arr[var_bin_search(varr, nmo2)].val;
+    if(opt != '\0') o2_val = varr->arr[id_o2].val;
     if((opt == '/' || opt == '%') && o2_val == 0) return 1;
     if((id = var_bin_search(varr, name)) >= 0)
     {
