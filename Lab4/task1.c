@@ -62,7 +62,7 @@ int cmd_rand(var_elem var[26], int arr_num, int count, int lb, int rb)
     var[arr_num].arr = (int*)malloc(sizeof(int) * count);
     for(i = 0; i < var[arr_num].size; i++)
     {
-        var[arr_num].arr[i] = rand() % (rb + 1) + lb;
+        var[arr_num].arr[i] = (rand() % (rb + 1 - lb) + lb);
     }
     return 0;
 }
@@ -93,7 +93,7 @@ int cmd_remove(var_elem var[26], int arr_num, int st_elem, int count)
 {
     if(var[arr_num].size == 0) return 60;
     if(st_elem >= var[arr_num].size) return 61;
-    if((st_elem + count) >= var[arr_num].size) return 62;
+    if((st_elem + count) > var[arr_num].size) return 62;
     int i;
     for(i = st_elem; i < var[arr_num].size - count; i++)
     {
@@ -120,39 +120,40 @@ int cmd_copy(var_elem var[26], int arr_num1, int arr_num2, int st_elem, int end_
     return 0;
 }
 
-stg_cmp(int a, int b)
+stg_cmp(int *a, int *b)
 {
-    return a - b;
+    return *a - *b;
 }
 
-rev_cmp(int a, int b)
+rev_cmp(int *a, int *b)
 {
-    return b - a;
+    return *b - *a;
 }
 
 int cmd_sort(var_elem var[26], int arr_num, int order)
 {
     if(var[arr_num].size == 0) return 80;
-    if(order == '+') qsort(var[arr_num].arr, sizeof(int), var[arr_num].size, stg_cmp);
-    else qsort(var[arr_num].arr, sizeof(int), var[arr_num].size, rev_cmp);
+    if(order == '+') qsort(var[arr_num].arr, var[arr_num].size, sizeof(int), stg_cmp);
+    else qsort(var[arr_num].arr, var[arr_num].size, sizeof(int), rev_cmp);
     return 0;
 }
 
 void swap(int *a, int *b)
 {
-    int *tmp;
-    tmp = a;
-    a = b;
-    b = tmp;
+    int tmp;
+    tmp = *a;
+    *a = *b;
+    *b = tmp;
 }
 
 int cmd_perm(var_elem var[26], int arr_num)
 {
     if(var[arr_num].size == 0) return 90;
-    int i;
+    int i, rand_id;
     for(i = var[arr_num].size - 1; i > 0; i--)
     {
-        swap(&var[arr_num].arr[i], var[arr_num].arr[rand() % (i + 1)]);
+        rand_id = rand() % (i + 1);
+        swap(&var[arr_num].arr[i], &var[arr_num].arr[rand_id]);
     }
     return 0;
 }
@@ -165,15 +166,15 @@ typedef struct
 
 void swap_str(stat_arr *a, stat_arr *b)
 {
-    int *tmp;
-    tmp = a;
-    a = b;
-    b = tmp;
+    stat_arr tmp;
+    tmp = *a;
+    *a = *b;
+    *b = tmp;
 }
 
-stat_cmp(stat_arr a, stat_arr b)
+stat_cmp(stat_arr *a, stat_arr *b)
 {
-    return a.val - b.val;
+    return a->val - b->val;
 }
 
 int cmd_stat(var_elem var[26], int arr_num)
@@ -188,7 +189,7 @@ int cmd_stat(var_elem var[26], int arr_num)
         st_arr[i].val = var[arr_num].arr[i];
         st_arr[i].id = i;
     }
-    qsort(st_arr, sizeof(stat_arr), var[arr_num].size, stat_cmp);
+    qsort(st_arr, var[arr_num].size, sizeof(stat_arr), stat_cmp);
     max_id = st_arr[var[arr_num].size - 1].id;
     min_id = st_arr[0].id;
     int tmp_rep = 1, tmp_rep_max = 1;
@@ -285,27 +286,41 @@ int cmd_prc(char *cmd, var_elem var[26])
     else if(!strcmp(buff, "Rand"))
     {
         int arr_num = toupper(cmd[5]) - 'A', count = 0, lb = 0, rb = 0;
+        int lb_neg = 0, rb_neg = 0;
         i = 8;
         while(cmd[i] != ',')
         {
-            count = count * 10 + cmd[i++]; 
+            count = count * 10 + (cmd[i++] - '0'); 
         }
         i += 2;
         while(cmd[i] != ',')
         {
-            lb = lb * 10 + cmd[i++]; 
+            if(cmd[i] == '-') 
+            {
+                lb_neg = 1;
+                i++;
+                continue;
+            }
+            lb = lb * 10 + (cmd[i++] - '0'); 
         }
         i += 2;
-        while(cmd[i] != ';')
+        while(cmd[i] != '\0')
         {
-            rb = rb * 10 + cmd[i++]; 
+            if(cmd[i] == '-') 
+            {
+                rb_neg = 1;
+                i++;
+                continue;
+            }
+            rb = rb * 10 + (cmd[i++] - '0'); 
         }
-
+        if(lb_neg) lb = -lb;
+        if(rb_neg) rb = -rb;
         return cmd_rand(var, arr_num, count, lb, rb);
     }
     else if(!strcmp(buff, "Conc"))
     {
-        int arr_num1 = toupper(cmd[5]) - 'A', arr_num2 = toupper(cmd[8]) - 'A';
+        int arr_num1 = toupper(cmd[7]) - 'A', arr_num2 = toupper(cmd[10]) - 'A';
         return cmd_conc(var, arr_num1, arr_num2);
     }
     else if(!strcmp(buff, "Free"))
@@ -319,12 +334,12 @@ int cmd_prc(char *cmd, var_elem var[26])
         i = 10;
         while(cmd[i] != ',')
         {
-            st_elem = st_elem * 10 + cmd[i++]; 
+            st_elem = st_elem * 10 + (cmd[i++] - '0'); 
         }
         i += 2;
-        while(cmd[i] != ';')
+        while(cmd[i] != '\0')
         {
-            count = count * 10 + cmd[i++]; 
+            count = count * 10 + (cmd[i++] - '0'); 
         }
         return cmd_remove(var, arr_num, st_elem, count);
     }
@@ -334,12 +349,12 @@ int cmd_prc(char *cmd, var_elem var[26])
         i = 8;
         while(cmd[i] != ',')
         {
-            st_elem = st_elem * 10 + cmd[i++]; 
+            st_elem = st_elem * 10 + (cmd[i++] - '0'); 
         }
         i += 2;
         while(cmd[i] != ',')
         {
-            end_elem = end_elem * 10 + cmd[i++]; 
+            end_elem = end_elem * 10 + (cmd[i++] - '0'); 
         }
         i += 2;
         int arr_num2 = toupper(cmd[i]) - 'A';
@@ -364,22 +379,22 @@ int cmd_prc(char *cmd, var_elem var[26])
     else if(!strcmp(buff, "Prin"))
     {
         int arr_num = toupper(cmd[6]) - 'A';
-        if(cmd[8] == 'a')
+        if(cmd[9] == 'a')
         {
             return cmd_print_all(var, arr_num);
         }
         else
         {
             int st_elem, end_elem;
-            i = 8;
+            i = 9;
             while(cmd[i] != ',')
             {
-                st_elem = st_elem * 10 + cmd[i++]; 
+                st_elem = st_elem * 10 + (cmd[i++] - '0'); 
             }
             i += 2;
-            while(cmd[i] != ';')
+            while(cmd[i] != '\0')
             {
-                end_elem = end_elem * 10 + cmd[i++]; 
+                end_elem = end_elem * 10 + (cmd[i++] - '0'); 
             }
             return cmd_print(var, arr_num, st_elem, end_elem);
         }
