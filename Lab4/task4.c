@@ -292,7 +292,7 @@ int main()
     if(!(fin = fopen("input4.txt", "r")))
     {
         perror("File opening error");
-        exit;
+        exit(1);
     }
 
     int need_to_rewrite = 1;
@@ -335,7 +335,7 @@ int main()
     list_print(&list);
     printf("\n");
 
-    date dt_tmp3 = {18, 10, 2011};
+    date dt_tmp3 = {18, 10, 1911};
     human h_tmp2 = {.birth = dt_tmp3, .gender = 'F', .salary = 1252.12};
     h_tmp2.surname = (char*)malloc(sizeof(char) * strlen(surname));
     strcpy(h_tmp2.surname, "Kotat");
@@ -353,7 +353,7 @@ int main()
         {
             perror("File opening error (2)");
             list_clear(&list);
-            exit;
+            exit(2);
         }
         
         list_fprint(&list, fin);
@@ -361,4 +361,5 @@ int main()
         fclose(fin);
     }
     list_clear(&list);
+    return 0;
 }
