@@ -85,16 +85,17 @@ int val_int_assign(var_arr *varr, char *name, int val)
 int val_var_assign(var_arr *varr, char *name, char *nmo1, char *nmo2, char opt)
 {
     int o1_val = varr->arr[var_bin_search(varr, nmo1)].val;
-    int o2_val = 0;
+    int o2_val = 0, id;
     if(opt != '\0') o2_val = varr->arr[var_bin_search(varr, nmo2)].val;
     if((opt == '/' || opt == '%') && o2_val == 0) return 1;
-    if(var_bin_search(varr, name) >= 0)
+    if((id = var_bin_search(varr, name)) >= 0)
     {
-        if(opt == '+') varr->arr[varr->size - 1].val = o1_val + o2_val;
-        else if(opt == '-') varr->arr[varr->size - 1].val = o1_val - o2_val;
-        else if(opt == '*') varr->arr[varr->size - 1].val = o1_val * o2_val;
-        else if(opt == '/') varr->arr[varr->size - 1].val = o1_val / o2_val;
-        else if(opt == '%') varr->arr[varr->size - 1].val = o1_val % o2_val;
+        if(opt == '+') varr->arr[id].val = o1_val + o2_val;
+        else if(opt == '-') varr->arr[id].val = o1_val - o2_val;
+        else if(opt == '*') varr->arr[id].val = o1_val * o2_val;
+        else if(opt == '/') varr->arr[id].val = o1_val / o2_val;
+        else if(opt == '%') varr->arr[id].val = o1_val % o2_val;
+        else if(opt == '\0') varr->arr[id].val = o1_val;
     }
     else
     {
@@ -105,6 +106,7 @@ int val_var_assign(var_arr *varr, char *name, char *nmo1, char *nmo2, char opt)
         else if(opt == '*') varr->arr[varr->size - 1].val = o1_val * o2_val;
         else if(opt == '/') varr->arr[varr->size - 1].val = o1_val / o2_val;
         else if(opt == '%') varr->arr[varr->size - 1].val = o1_val % o2_val;
+        else if(opt == '\0') varr->arr[varr->size - 1].val = o1_val;
         varr->arr[varr->size - 1].name = (char*)malloc(sizeof(char) * (strlen(name) + 1));
         strcpy(varr->arr[varr->size - 1].name, name);
         qsort(varr->arr, varr->size, sizeof(arr_elem), name_cmp);
@@ -178,14 +180,17 @@ int cmd_prc(char *cmd, var_arr *varr)
             }
             opt = cmd[i++];
             if(opt == '\0') val_var_assign(varr, buffV, buffo1, NULL, opt);
-            j = 0;
-            while(isalpha(cmd[i]))
+            else
             {
-                buffo2[j] = cmd[i];
-                i++;
-                j++;
+                j = 0;
+                while(isalpha(cmd[i]))
+                {
+                    buffo2[j] = cmd[i];
+                    i++;
+                    j++;
+                }
+                val_var_assign(varr, buffV, buffo1, buffo2, opt);
             }
-            val_var_assign(varr, buffV, buffo1, buffo2, opt);
         }
     }
 }
