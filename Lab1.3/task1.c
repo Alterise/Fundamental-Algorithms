@@ -172,13 +172,8 @@ int main()
 {
     int digit;
     char fin[33];
-    // int digit2;
     scanf("%d", &digit);
-    // scanf("%d", &digit2);
-    change_sys(digit, 32, &fin);
+    change_sys(digit, 16, &fin);
     printf("%s\n", fin);
 
-    // printf("%d\n", bit_substr(digit, digit2));
-    // printf("%d", bit_sum(digit, digit2));
-    // printf("%d", bit_sum(bit_inverse(digit ^ (1 << 31)), 1));
 }

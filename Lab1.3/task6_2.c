@@ -173,7 +173,7 @@ int main()
         }
         else if(switcher == 1)
         {
-            printf("\nInput mass: ");
+            printf("\nInput mass: ") ;
             scanf("%lf", &mass);
             printf("Input id: ");
             scanf("%d", &id);

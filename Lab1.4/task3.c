@@ -136,4 +136,5 @@ int main()
     }
     while(PRQ_dequeue_check(queue));
     PRQ_destroy(queue);
+    return 0;
 }

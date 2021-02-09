@@ -1,0 +1,50 @@
+{
+    READ(X, 17  )
+
+    ; WRite(X, 1  {%7 {);
+    7 );
+    a}dlald;} 7 );
+
+    %       AD
+    reAD
+    (F,
+        17)
+
+    ;   
+
+read(A, 2);
+read(B, 2);
+
+C:= A + B;
+write(C, 2);
+
+C:= A & B;
+write(C, 2);
+
+C:= A -> B;
+write(C, 2);
+
+C:= A <- B;
+write(C, 2);
+
+C:= A ~ B;
+write(C, 2);
+
+C:= A <> B;
+write(C, 2);
+
+C:= A +> B;
+write(C, 2);
+
+C:= A ? B;
+write(C, 2);
+
+C:= A ! B;
+write(C, 2);
+}
+
+read(A, 2);
+read(B, 2);
+
+C:= A & B;
+write(C, 2);

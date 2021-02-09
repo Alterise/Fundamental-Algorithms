@@ -13,7 +13,7 @@ typedef struct
 } arr_elem;
 
 typedef struct
-{
+{   
     int size;
     arr_elem *arr;
 } var_arr;

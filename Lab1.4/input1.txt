@@ -1,0 +1,9 @@
+Load A, input1b.txt;
+Sort A+;
+Save A, input1b.txt;
+Rand B, 5, -50, -30;
+Print A, all;
+Concat A, B;
+Print A, all;
+Free(A);
+Free(B);

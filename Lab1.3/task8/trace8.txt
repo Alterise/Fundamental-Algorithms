@@ -1,0 +1,4 @@
+Value change of A to 0 in base 2
+Value change of B to 0 in base 2
+Value assignment to C from operation A & B
+Value output of C in base 2 (Value: 0)

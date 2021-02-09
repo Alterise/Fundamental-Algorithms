@@ -57,6 +57,7 @@ int cmd_save(var_elem var[26], int arr_num, char fname[BUFSIZ])
 int cmd_rand(var_elem var[26], int arr_num, int count, int lb, int rb)
 {
     if(var[arr_num].size != 0) return 30;
+    if(lb > rb) return 31;
     int i;
     var[arr_num].size = count;
     var[arr_num].arr = (int*)malloc(sizeof(int) * count);
@@ -446,6 +447,7 @@ int main(int argc, char **argv)
                     else if(to_do == 20) printf("Function SAVE fail (Array is empty) [Command № %d]\n", step_counter);
                     else if(to_do == 21) printf("Function SAVE fail (File opening error) [Command № %d]\n", step_counter);
                     else if(to_do == 30) printf("Function RAND fail (Array isn't empty) [Command № %d]\n", step_counter);
+                    else if(to_do == 31) printf("Function RAND fail (Left boarder is greater than right boarder) [Command № %d]\n", step_counter);
                     else if(to_do == 40) printf("Function CONC fail (1st array is empty) [Command № %d]\n", step_counter);
                     else if(to_do == 41) printf("Function CONC fail (2nd array is empty) [Command № %d]\n", step_counter);
                     else if(to_do == 50) printf("Function FREE fail (Array is empty) [Command № %d]\n", step_counter);
