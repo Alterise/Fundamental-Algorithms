@@ -1,0 +1,3 @@
+prior=23 task='Du hast'
+prior=25 task='Du'
+prior=0 task='Du hast mich gefragt und ich hab nichts gesagt'

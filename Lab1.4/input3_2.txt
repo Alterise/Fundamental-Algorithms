@@ -1,0 +1,4 @@
+prior=4 task='Du hast mich'
+prior=15 task='Du hast mich'
+prior=1 task='Du hast mich gefragt'
+prior=4 task='Du hast mich gefragt'

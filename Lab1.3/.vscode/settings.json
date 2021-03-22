@@ -1,0 +1,19 @@
+{
+    "todohighlight.keywords": [
+        {
+            "text": "FIXME:",
+            "color": "#FF00FF",
+            "border": "1px solid #FF00FF",
+            "borderRadius": "2px", 
+            "backgroundColor": "rgba(0,0,0,1)"
+        },
+        {
+            "text": "TODO:",
+            "color": "#FF4500",
+            "border": "1px solid #FF4500",
+            "borderRadius": "2px", 
+            "backgroundColor": "rgba(0,0,0,1)",
+            "isWholeLine": false
+        }
+    ]
+}
