@@ -2,6 +2,7 @@
 #include <exception>
 #include <iostream>
 #include <sstream>
+#include <vector>
 #include <cmath>
 
 using namespace std;
@@ -89,7 +90,7 @@ public:
 		}
 	}
 
-	Matrix operator+(const Matrix& rhs) {
+	Matrix operator+(const Matrix& rhs) const {
 		if (size_value != rhs.size_value) {
 			throw invalid_argument("Matrices' sizes aren't equal");
 		}
@@ -113,7 +114,7 @@ public:
 		}
 	}
 
-	Matrix operator-(const Matrix& rhs) {
+	Matrix operator-(const Matrix& rhs) const {
 		if (size_value != rhs.size_value) {
 			throw invalid_argument("Matrices' sizes aren't equal");
 		}
@@ -155,7 +156,7 @@ public:
 		}
 	}
 
-	Matrix operator*(const Matrix& rhs) {
+	Matrix operator*(const Matrix& rhs) const {
 		if (size_value != rhs.size_value) {
 			throw invalid_argument("Matrices' sizes aren't equal");
 		}
@@ -165,7 +166,7 @@ public:
 		return tmp;
 	}
 
-	Matrix operator*(const double& rhs) {
+	Matrix operator*(const double& rhs) const {
 
 		Matrix tmp(*this);
 		tmp *= rhs;
@@ -220,54 +221,101 @@ public:
 
 	friend istream& operator>>(istream& stream, Matrix& matrix) {
 		string str_tmp;
+		double tmp_val;
+		vector<double> vec;
 		getline(stream, str_tmp);
 		istringstream tmp_stream(str_tmp);
-		Matrix tmp = matrix;
+		//Matrix tmp = matrix;
 		char sym;
 		tmp_stream >> sym;
 		if (sym != '[') {
-			throw invalid_argument("Wrong input");
+			throw invalid_argument("Wrong matrix input (\'[\' lost)");
 		}
-		for (size_t i = 0; i < tmp.size_value; i++)
+		tmp_stream >> sym;
+		if (sym != '[') {
+			throw invalid_argument("Wrong matrix input (\'[\' lost)");
+		}
+
+		while ((sym != EOF) && (sym != ']')) {
+			try {
+				tmp_stream >> tmp_val;
+				vec.push_back(tmp_val);
+				tmp_stream >> sym;
+				if (sym == ']') {
+					continue;
+				} else if (sym != ',') {
+					throw invalid_argument("Wrong matrix input (\',\' lost)");
+				}
+			}
+			catch (exception& ex) {
+				throw invalid_argument("Wrong matrix input (invalid element value)");
+			}
+		}
+
+		const size_t size = vec.size();
+		
+		for (size_t i = 0; i < matrix.size_value; i++)
+		{
+			delete matrix.data[i];
+		}
+		delete[] matrix.data;
+
+		matrix.size_value = size;
+		matrix.data = new double* [matrix.size_value];
+		for (size_t i = 0; i < matrix.size_value; i++)
+		{
+			matrix.data[i] = new double[matrix.size_value];
+		}
+
+		for (size_t i = 0; i < matrix.size_value; i++)
+		{
+			matrix.data[0][i] = vec[i];
+		}
+
+		tmp_stream >> sym;
+		if (sym != ',') {
+			throw invalid_argument("Wrong matrix input (\',\' lost)");
+		}
+
+		for (size_t i = 1; i < size; i++)
 		{
 			tmp_stream >> sym;
 			if (sym != '[') {
-				throw invalid_argument("Wrong input");
+				throw invalid_argument("Wrong matrix input (\'[\' lost)");
 			}
-			for (size_t j = 0; j < tmp.size_value; j++)
+			for (size_t j = 0; j < size; j++)
 			{
 				try {
-					tmp_stream >> tmp.data[i][j];
+					tmp_stream >> matrix.data[i][j];
 				} catch(exception& ex) {
-					throw invalid_argument("Wrong input");
+					throw invalid_argument("Wrong matrix input (invalid element value)");
 				}
-				if ((j + 1) < tmp.size_value) {
+				if ((j + 1) < matrix.size_value) {
 					tmp_stream >> sym;
 					if (sym != ',') {
-						throw invalid_argument("Wrong input");
+						throw invalid_argument("Wrong matrix input (\',\' lost)");
 					}
 				}
 			}
 			tmp_stream >> sym;
 			if (sym != ']') {
-				throw invalid_argument("Wrong input");
+				throw invalid_argument("Wrong matrix input (\']\' lost)");
 			}
-			if ((i + 1) < tmp.size_value) {
+			if ((i + 1) < matrix.size_value) {
 				tmp_stream >> sym;
 				if (sym != ',') {
-					throw invalid_argument("Wrong input");
+					throw invalid_argument("Wrong matrix input (\',\' lost)");
 				}
 			}
 		}
 		if (sym != ']') {
-			throw invalid_argument("Wrong input");
+			throw invalid_argument("Wrong matrix input (\']\' lost)");
 		}
 		tmp_stream >> sym;
 		while ((sym = tmp_stream.get()) == ' ');
 		if (sym != EOF) {
-			throw invalid_argument("Wrong input");
+			throw invalid_argument("Wrong input (extra symbols in line)");
 		}
-		matrix = tmp;
 		return stream;
 	}
 
@@ -330,6 +378,9 @@ public:
 
 	friend Matrix reversed(const Matrix &matrix) {
 		double det = determinant(matrix);
+		if (!det) {
+			throw invalid_argument("Can't calculate reversed matrix. The value of determinant mustn't be ZERO");
+		}
 		Matrix reversed_matrix(matrix.size_value);
 		for (size_t i = 0; i < matrix.size_value; i++)
 		{
@@ -350,6 +401,33 @@ public:
 		}
 
 		return reversed_matrix;
+	}
+
+	friend double trace(const Matrix& matrix) {
+		double sum = 0;
+		for (size_t i = 0; i < matrix.size_value; i++)
+		{
+			sum += matrix.data[i][i];
+		}
+		return sum;
+	}
+
+	friend Matrix exponential(const Matrix& matrix) {
+		Matrix curr_term(matrix);
+		Matrix E = matrix.get_E_matrix();
+		Matrix curr_matrix = E + curr_term;
+		Matrix prev_matrix= E;
+		double curr_power_val = 2;
+		double curr_fact_val = 2;
+		curr_term *= matrix * (1 / curr_fact_val);
+		while (prev_matrix != curr_matrix) {
+			prev_matrix = curr_matrix;
+			curr_matrix += curr_term;
+			curr_power_val++;
+			curr_fact_val *= curr_power_val;
+			curr_term *= matrix * (1 / curr_fact_val);
+		}
+		return curr_matrix;
 	}
 
 private:
@@ -374,5 +452,13 @@ private:
 		}
 		return block;
 	}
-};
 
+	Matrix get_E_matrix() const {
+		Matrix E((*this).size_value);
+		for (size_t i = 0; i < E.size_value; i++)
+		{
+			E.data[i][i] = 1;
+		}
+		return E;
+	}
+};
