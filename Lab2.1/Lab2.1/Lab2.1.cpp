@@ -34,9 +34,9 @@ int main()
     int b = 1;
     cout << matr2[{a, b}] << endl;
     my_stream.clear();
-    my_stream.str("[[2, 3], [55, 6]]");
+    my_stream.str("[[1, 2, -0], [0, 1, -0], [3, -0, 1]]");
     cout << my_stream.str() << endl;
-    Matrix matr5(2);
+    Matrix matr5(3);
     try {
         my_stream >> matr5;
     }
@@ -45,4 +45,5 @@ int main()
         return 0;
     }
     cout << matr5;
+    cout << reversed(matr5);
 }

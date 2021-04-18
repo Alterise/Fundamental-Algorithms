@@ -75,7 +75,7 @@ public:
 		return *this;
 	}
 
-	Matrix operator+=(const Matrix& rhs) {
+	void operator+=(const Matrix& rhs) {
 		if (size_value != rhs.size_value) {
 			throw invalid_argument("Matrices' sizes aren't equal");
 		}
@@ -87,7 +87,6 @@ public:
 				data[i][j] += rhs.data[i][j];
 			}
 		}
-		return *this;
 	}
 
 	Matrix operator+(const Matrix& rhs) {
@@ -100,7 +99,7 @@ public:
 		return sum;
 	}
 
-	Matrix operator-=(const Matrix& rhs) {
+	void operator-=(const Matrix& rhs) {
 		if (size_value != rhs.size_value) {
 			throw invalid_argument("Matrices' sizes aren't equal");
 		}
@@ -112,7 +111,6 @@ public:
 				data[i][j] -= rhs.data[i][j];
 			}
 		}
-		return *this;
 	}
 
 	Matrix operator-(const Matrix& rhs) {
@@ -125,7 +123,7 @@ public:
 		return diff;
 	}
 
-	Matrix operator*=(const Matrix& rhs) {
+	void operator*=(const Matrix& rhs) {
 		if (size_value != rhs.size_value) {
 			throw invalid_argument("Matrices' sizes aren't equal");
 		}
@@ -144,10 +142,9 @@ public:
 				data[i][j] = sum;
 			}
 		}
-		return *this;
 	}
 
-	Matrix operator*=(const double& rhs) {
+	void operator*=(const double& rhs) {
 
 		for (size_t i = 0; i < size_value; i++)
 		{
@@ -156,7 +153,6 @@ public:
 				data[i][j] *= rhs;
 			}
 		}
-		return *this;
 	}
 
 	Matrix operator*(const Matrix& rhs) {
@@ -332,8 +328,32 @@ public:
 		return det;
 	}
 
+	friend Matrix reversed(const Matrix &matrix) {
+		double det = determinant(matrix);
+		Matrix reversed_matrix(matrix.size_value);
+		for (size_t i = 0; i < matrix.size_value; i++)
+		{
+			for (size_t j = 0; j < matrix.size_value; j++)
+			{
+				reversed_matrix.data[i][j] = determinant(matrix.getminor({(int)i, (int)j})) * 
+											 ((i + j) % 2 ? -1 : 1);
+			}
+		}
+		reversed_matrix = transpose(reversed_matrix);
+
+		for (size_t i = 0; i < matrix.size_value; i++)
+		{
+			for (size_t j = 0; j < matrix.size_value; j++)
+			{
+				reversed_matrix.data[i][j] /= det;
+			}
+		}
+
+		return reversed_matrix;
+	}
+
 private:
-	Matrix getminor(const Index& index){
+	Matrix getminor(const Index& index) const {
 		size_t m_i = 0, m_j = 0;
 		Matrix block(size_value - 1);
 		for (size_t i = 0; i < size_value; i++)
