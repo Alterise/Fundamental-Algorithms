@@ -143,6 +143,7 @@
     <ClCompile Include="Lab2.1.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Parser.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="TeX_convertible.h" />
   </ItemGroup>

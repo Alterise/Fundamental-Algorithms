@@ -7,3 +7,4 @@ class TeX_convertible
 {
 	virtual string convert() const = 0;
 };
+

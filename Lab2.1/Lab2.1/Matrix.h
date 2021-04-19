@@ -1,6 +1,7 @@
 #pragma once
 #include <exception>
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include <vector>
 #include <cmath>
@@ -13,12 +14,34 @@ struct Index
 	int x;
 };
 
-class Matrix
+void skip_spaces(istream&);
+
+class Matrix : public TeX_convertible
 {
 private:
 	double** data;
 	size_t size_value;
 public:
+	string convert() const {
+		string tex_str;
+		tex_str += "\\begin{pmatrix}\n";
+		for (size_t i = 0; i < size_value; i++)
+		{
+			for (size_t j = 0; j < size_value; j++)
+			{
+				tex_str += to_string(data[i][j]);
+				if ((j + 1) < size_value) {
+					tex_str += " & ";
+				}
+			}
+			if ((i + 1) < size_value) {
+				tex_str += "\\\\";
+			}
+			tex_str += "\n";
+		}
+		tex_str += "\\end{pmatrix}";
+		return tex_str;
+	}
 	Matrix(int size = 0, double default_value = 0) {
 		if (size < 0) {
 			throw invalid_argument("Invalid matrix size");
@@ -130,7 +153,6 @@ public:
 		}
 
 		Matrix tmp(*this);
-
 		for (size_t i = 0; i < size_value; i++)
 		{
 			for (size_t j = 0; j < size_value; j++)
@@ -138,7 +160,7 @@ public:
 				double sum = 0;
 				for (size_t k = 0; k < size_value; k++)
 				{
-					sum += tmp.data[j][k] * rhs.data[k][j];
+					sum += tmp.data[i][k] * rhs.data[k][j];
 				}
 				data[i][j] = sum;
 			}
@@ -160,7 +182,6 @@ public:
 		if (size_value != rhs.size_value) {
 			throw invalid_argument("Matrices' sizes aren't equal");
 		}
-
 		Matrix tmp(*this);
 		tmp *= rhs;
 		return tmp;
@@ -212,7 +233,8 @@ public:
 		{
 			for (size_t j = 0; j < matrix.size_value; j++)
 			{
-				stream << matrix.data[i][j] << " ";
+				stream << fixed << setprecision(5);
+				stream << setw(15) << matrix.data[i][j] << " ";
 			}
 			stream << endl;
 		}
@@ -225,32 +247,37 @@ public:
 		vector<double> vec;
 		getline(stream, str_tmp);
 		istringstream tmp_stream(str_tmp);
-		//Matrix tmp = matrix;
 		char sym;
-		tmp_stream >> sym;
-		if (sym != '[') {
+		skip_spaces(tmp_stream);
+		if (tmp_stream.peek() != '[') {
 			throw invalid_argument("Wrong matrix input (\'[\' lost)");
 		}
-		tmp_stream >> sym;
-		if (sym != '[') {
+		tmp_stream.ignore(1);
+		skip_spaces(tmp_stream);
+		if (tmp_stream.peek() != '[') {
 			throw invalid_argument("Wrong matrix input (\'[\' lost)");
 		}
-
-		while ((sym != EOF) && (sym != ']')) {
-			try {
+		tmp_stream.ignore(1);
+		skip_spaces(tmp_stream);
+		while ((tmp_stream.peek() != EOF) && (tmp_stream.peek() != ']')) {
+			if (isdigit(tmp_stream.peek())) {
 				tmp_stream >> tmp_val;
-				vec.push_back(tmp_val);
-				tmp_stream >> sym;
-				if (sym == ']') {
-					continue;
-				} else if (sym != ',') {
-					throw invalid_argument("Wrong matrix input (\',\' lost)");
-				}
-			}
-			catch (exception& ex) {
+			} else {
 				throw invalid_argument("Wrong matrix input (invalid element value)");
 			}
+			vec.push_back(tmp_val);
+			skip_spaces(tmp_stream);
+			
+			if (tmp_stream.peek() == ']') {
+				continue;
+			} else if (tmp_stream.peek() != ',') {
+				throw invalid_argument("Wrong matrix input (\',\' lost)");
+			}
+			tmp_stream.ignore(1);
+			skip_spaces(tmp_stream);
 		}
+		tmp_stream.ignore(1);
+		skip_spaces(tmp_stream);
 
 		const size_t size = vec.size();
 		
@@ -271,49 +298,58 @@ public:
 		{
 			matrix.data[0][i] = vec[i];
 		}
-
-		tmp_stream >> sym;
-		if (sym != ',') {
-			throw invalid_argument("Wrong matrix input (\',\' lost)");
+		if (matrix.size_value != 1) {
+			if (tmp_stream.peek() != ',') {
+				throw invalid_argument("Wrong matrix input (\',\' lost)");
+			}
+			tmp_stream.ignore(1);
 		}
-
 		for (size_t i = 1; i < size; i++)
 		{
-			tmp_stream >> sym;
-			if (sym != '[') {
+			skip_spaces(tmp_stream);
+			if (tmp_stream.peek() != '[') {
 				throw invalid_argument("Wrong matrix input (\'[\' lost)");
 			}
+			tmp_stream.ignore(1);
 			for (size_t j = 0; j < size; j++)
 			{
-				try {
-					tmp_stream >> matrix.data[i][j];
-				} catch(exception& ex) {
+				skip_spaces(tmp_stream);
+				if (isdigit(tmp_stream.peek())) {
+					try {
+						tmp_stream >> matrix.data[i][j];
+					}
+					catch (exception&) {
+						throw invalid_argument("Wrong matrix input (invalid element value)");
+					}
+				} else {
 					throw invalid_argument("Wrong matrix input (invalid element value)");
 				}
 				if ((j + 1) < matrix.size_value) {
-					tmp_stream >> sym;
-					if (sym != ',') {
+					if (tmp_stream.peek() != ',') {
 						throw invalid_argument("Wrong matrix input (\',\' lost)");
 					}
+					tmp_stream.ignore(1);
 				}
 			}
-			tmp_stream >> sym;
-			if (sym != ']') {
+			if (tmp_stream.peek() != ']') {
 				throw invalid_argument("Wrong matrix input (\']\' lost)");
 			}
+			tmp_stream.ignore(1);
+			skip_spaces(tmp_stream);
 			if ((i + 1) < matrix.size_value) {
-				tmp_stream >> sym;
-				if (sym != ',') {
+				if (tmp_stream.peek() != ',') {
 					throw invalid_argument("Wrong matrix input (\',\' lost)");
 				}
+				tmp_stream.ignore(1);
 			}
 		}
-		if (sym != ']') {
+
+		if (tmp_stream.peek() != ']') {
 			throw invalid_argument("Wrong matrix input (\']\' lost)");
 		}
-		tmp_stream >> sym;
-		while ((sym = tmp_stream.get()) == ' ');
-		if (sym != EOF) {
+		tmp_stream.ignore(1);
+		skip_spaces(tmp_stream);
+		if (tmp_stream.peek() != EOF) {
 			throw invalid_argument("Wrong input (extra symbols in line)");
 		}
 		return stream;
@@ -462,3 +498,9 @@ private:
 		return E;
 	}
 };
+
+void skip_spaces(istream& stream) {
+	while (stream.peek() == ' ') {
+		stream.ignore(1);
+	}
+}
