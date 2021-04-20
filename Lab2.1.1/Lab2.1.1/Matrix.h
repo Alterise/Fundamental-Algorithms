@@ -1,4 +1,5 @@
 #pragma once
+#include "TeX_convertible.h"
 #include <exception>
 #include <iostream>
 #include <iomanip>
