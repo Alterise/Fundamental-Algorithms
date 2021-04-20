@@ -80,7 +80,7 @@ public:
 		delete[] data;
 	}
 
-	Matrix operator=(const Matrix& rhs) {
+	Matrix& operator=(const Matrix& rhs) {
 		for (size_t i = 0; i < size_value; i++)
 		{
 			delete data[i];
@@ -100,7 +100,7 @@ public:
 		return *this;
 	}
 
-	void operator+=(const Matrix& rhs) {
+	Matrix& operator+=(const Matrix& rhs) {
 		if (size_value != rhs.size_value) {
 			throw invalid_argument("Matrices' sizes aren't equal");
 		}
@@ -112,6 +112,7 @@ public:
 				data[i][j] += rhs.data[i][j];
 			}
 		}
+		return *this;
 	}
 
 	Matrix operator+(const Matrix& rhs) const {
@@ -124,7 +125,7 @@ public:
 		return sum;
 	}
 
-	void operator-=(const Matrix& rhs) {
+	Matrix& operator-=(const Matrix& rhs) {
 		if (size_value != rhs.size_value) {
 			throw invalid_argument("Matrices' sizes aren't equal");
 		}
@@ -136,6 +137,7 @@ public:
 				data[i][j] -= rhs.data[i][j];
 			}
 		}
+		return *this;
 	}
 
 	Matrix operator-(const Matrix& rhs) const {
@@ -148,7 +150,7 @@ public:
 		return diff;
 	}
 
-	void operator*=(const Matrix& rhs) {
+	Matrix& operator*=(const Matrix& rhs) {
 		if (size_value != rhs.size_value) {
 			throw invalid_argument("Matrices' sizes aren't equal");
 		}
@@ -166,9 +168,10 @@ public:
 				data[i][j] = sum;
 			}
 		}
+		return *this;
 	}
 
-	void operator*=(const double& rhs) {
+	Matrix& operator*=(double rhs) {
 
 		for (size_t i = 0; i < size_value; i++)
 		{
@@ -177,6 +180,7 @@ public:
 				data[i][j] *= rhs;
 			}
 		}
+		return *this;
 	}
 
 	Matrix operator*(const Matrix& rhs) const {
@@ -188,20 +192,20 @@ public:
 		return tmp;
 	}
 
-	Matrix operator*(const double& rhs) const {
+	Matrix operator*(double rhs) const {
 
 		Matrix tmp(*this);
 		tmp *= rhs;
 		return tmp;
 	}
 
-	friend Matrix operator*(const double& lhs, const Matrix& rhs) {
+	friend Matrix operator*(double lhs, const Matrix& rhs) {
 		Matrix tmp(rhs);
 		tmp *= lhs;
 		return tmp;
 	}
 
-	bool operator==(const Matrix& rhs) {
+	bool operator==(const Matrix& rhs) const {
 		if (size_value != rhs.size_value) {
 			throw invalid_argument("Matrices' sizes aren't equal");
 		}
@@ -217,7 +221,7 @@ public:
 		return true;
 	}
 
-	bool operator!=(const Matrix& rhs) {
+	bool operator!=(const Matrix& rhs) const {
 		return !(*this == rhs);
 	}
 
@@ -494,7 +498,7 @@ private:
 	}
 
 	Matrix get_E_matrix() const {
-		Matrix E((*this).size_value);
+		Matrix E(size_value);
 		for (size_t i = 0; i < E.size_value; i++)
 		{
 			E.data[i][i] = 1;

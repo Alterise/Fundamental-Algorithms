@@ -1,7 +1,7 @@
 ﻿  Lab2.1.1.cpp
-D:\GitHub\Fundamental-Algorithms\Lab2.1.1\Lab2.1.1\Matrix.h(225,45): warning C4018: '>=': signed/unsigned mismatch
-D:\GitHub\Fundamental-Algorithms\Lab2.1.1\Lab2.1.1\Matrix.h(225,70): warning C4018: '>=': signed/unsigned mismatch
-D:\GitHub\Fundamental-Algorithms\Lab2.1.1\Lab2.1.1\Matrix.h(251,8): warning C4101: 'sym': unreferenced local variable
-D:\GitHub\Fundamental-Algorithms\Lab2.1.1\Lab2.1.1\Matrix.h(385,27): warning C4018: '<': signed/unsigned mismatch
-D:\GitHub\Fundamental-Algorithms\Lab2.1.1\Lab2.1.1\Matrix.h(404,22): warning C4018: '<': signed/unsigned mismatch
+D:\GitHub\Fundamental-Algorithms\Lab2.1.1\Lab2.1.1\Matrix.h(229,45): warning C4018: '>=': signed/unsigned mismatch
+D:\GitHub\Fundamental-Algorithms\Lab2.1.1\Lab2.1.1\Matrix.h(229,70): warning C4018: '>=': signed/unsigned mismatch
+D:\GitHub\Fundamental-Algorithms\Lab2.1.1\Lab2.1.1\Matrix.h(255,8): warning C4101: 'sym': unreferenced local variable
+D:\GitHub\Fundamental-Algorithms\Lab2.1.1\Lab2.1.1\Matrix.h(389,27): warning C4018: '<': signed/unsigned mismatch
+D:\GitHub\Fundamental-Algorithms\Lab2.1.1\Lab2.1.1\Matrix.h(408,22): warning C4018: '<': signed/unsigned mismatch
   Lab2.1.1.vcxproj -> D:\GitHub\Fundamental-Algorithms\Lab2.1.1\Debug\Lab2.1.1.exe
