@@ -3,5 +3,8 @@
 
 int main()
 {
-    RB_tree mytree;
+    // RB_tree mytree;
+    std::string A;
+    std::cin >> A;
+    std::cout << A;
 }
