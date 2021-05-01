@@ -3,8 +3,7 @@
 
 int main()
 {
-    // RB_tree mytree;
-    std::string A;
-    std::cin >> A;
-    std::cout << A;
+    Date d1 = {22, 02, 2001};
+    Date d2 = {31, 12, 1990};
+    std::cout << (d2 < d1);
 }
