@@ -1,4 +1,4 @@
-#include <iostream>
+//#include <iostream>
 #include "RB_tree.h"
 
 template <typename T> void RB_tree<T>::insert(const int &key) {
