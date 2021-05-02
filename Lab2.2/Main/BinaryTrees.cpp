@@ -4,5 +4,5 @@
 
 int main()
 {
-    RB_tree<Message> tree(new messages_strategy);
+//    RB_tree<Message> tree(new messages_strategy);
 }
