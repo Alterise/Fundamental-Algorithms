@@ -62,9 +62,8 @@ public:
     }
 };
 
-template <typename T>
-class number_strategy : strategy<T> {
-    int compare(const T& lhs, const T& rhs) override {
+class int_strategy : public strategy<int> {
+    int compare(const int& lhs, const int& rhs) override {
         return lhs - rhs;
     }
 };

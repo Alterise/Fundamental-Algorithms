@@ -4,9 +4,10 @@
 template <typename T>
 class RB_tree : public binary_tree<T>
 {
-    using binary_tree<T>::binary_tree;
 public:
-    void insert(const int &key) override;
-    RB_tree<T>& search(const int &key) override;
-    void remove(const int &key) override;
+//    using binary_tree<T>::binary_tree;
+    explicit RB_tree(strategy<T>* comparator) : binary_tree<T>(comparator) {}
+    void insert(const T&) override;
+    void remove(const T&) override;
+    bool search(const T&) override;
 };
