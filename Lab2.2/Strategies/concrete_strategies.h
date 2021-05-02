@@ -64,7 +64,7 @@ public:
 
 template <typename T>
 class number_strategy : strategy<T> {
-    bool compare(const T& lhs, const T& rhs) override {
+    int compare(const T& lhs, const T& rhs) override {
         return lhs - rhs;
     }
 };
