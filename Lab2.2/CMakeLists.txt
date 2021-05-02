@@ -4,4 +4,4 @@ project(Lab2_2)
 set(CMAKE_CXX_STANDARD 17)
 
 include_directories("BinaryTrees" "Strategies")
-add_executable(Lab2_2 "main.cpp" "BinaryTrees/RB_tree.cpp")
+add_executable(Lab2_2 "main.cpp")
