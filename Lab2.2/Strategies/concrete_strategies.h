@@ -17,13 +17,7 @@ struct Date {
         }
     }
     bool operator==(const Date& rhs) const {
-        if(year != rhs.year) {
-            return false;
-        } else if(month != rhs.month) {
-            return false;
-        } else {
-            return day == rhs.day;
-        }
+        return ((year == rhs.year) && (month == rhs.month) && (day == rhs.day));
     }
     bool operator>(const Date& rhs) const {
         if(*this == rhs) {
@@ -43,7 +37,7 @@ struct Message {
 	std::string data;
 };
 
-class messages_strategy : public strategy<Message> {
+class message_strategy : public strategy<Message> {
 public:
     int compare(const Message& lhs, const Message& rhs) override {
         if(lhs.date.year != rhs.date.year) {
