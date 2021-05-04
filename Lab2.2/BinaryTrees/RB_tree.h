@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <utility>
 #include "binary_tree.h"
 
 using std::cout;
@@ -110,30 +111,28 @@ private:
         }
     }
     void tree_fix(std::vector<node<T>*>& route) {
-        node<T>* current_node = route.back();
-        route.pop_back();
-        if(route.empty()) {
+        if(route.size() < 3) {
             return;
         }
+        node<T>* current_node = route.back();
+        route.pop_back();
         node<T>* parent_node = route.back();
         route.pop_back();
         node<T>* grandparent_node;
         bool uncle_is_black;
-        if(!route.empty()) {
-            grandparent_node = route.back();
-            route.pop_back();
-            if(grandparent_node->_left_child != parent_node) {
-                if(grandparent_node->_left_child != nullptr) {
-                    uncle_is_black = grandparent_node->_left_child->_is_black;
-                } else {
-                    uncle_is_black = true;
-                }
+        grandparent_node = route.back();
+        route.pop_back();
+        if(grandparent_node->_left_child != parent_node) {
+            if(grandparent_node->_left_child != nullptr) {
+                uncle_is_black = grandparent_node->_left_child->_is_black;
             } else {
-                if(grandparent_node->_right_child != nullptr) {
-                    uncle_is_black = grandparent_node->_right_child->_is_black;
-                } else {
-                    uncle_is_black = true;
-                }
+                uncle_is_black = true;
+            }
+        } else {
+            if(grandparent_node->_right_child != nullptr) {
+                uncle_is_black = grandparent_node->_right_child->_is_black;
+            } else {
+                uncle_is_black = true;
             }
         }
         // Case 0: Parent is black
@@ -152,6 +151,61 @@ private:
             route.push_back(grandparent_node);
             tree_fix(route);
             return;
+        }
+        // Case 2: Uncle is black
+        if(uncle_is_black) {
+            // Case 2.1: Left parent
+            if(grandparent_node->_left_child == parent_node) {
+                // Case 2.1.1: Right child
+                if(parent_node->_right_child == current_node) {
+                    grandparent_node->_left_child = current_node;
+                    parent_node->_right_child = current_node->_right_child;
+                    current_node->_right_child = parent_node->_left_child;
+                    parent_node->_left_child = current_node->_left_child;
+                    current_node->_left_child = parent_node;
+                    std::swap(current_node, parent_node);
+                }
+                // Case 2.1.2: Left child | continuation of Case 2.1.1
+                grandparent_node->_left_child = parent_node->_right_child;
+                parent_node->_right_child = grandparent_node;
+                if(!route.empty()) {
+                    if(route.back()->_left_child == grandparent_node) {
+                        route.back()->_left_child = parent_node;
+                    } else {
+                        route.back()->_right_child = parent_node;
+                    }
+                }
+                std::swap(grandparent_node->_is_black, parent_node->_is_black);
+                if(_root == grandparent_node) {
+                    _root = parent_node;
+                }
+            }
+            // Case 2.2: Right parent
+            else {
+                // Case 2.2.1: Left child
+                if(parent_node->_left_child == current_node) {
+                    grandparent_node->_right_child = current_node;
+                    parent_node->_left_child = current_node->_left_child;
+                    current_node->_left_child = parent_node->_right_child;
+                    parent_node->_right_child = current_node->_right_child;
+                    current_node->_right_child = parent_node;
+                    std::swap(current_node, parent_node);
+                }
+                // Case 2.2.2: Right child | continuation of Case 2.2.1
+                grandparent_node->_right_child = parent_node->_left_child;
+                parent_node->_left_child = grandparent_node;
+                if(!route.empty()) {
+                    if(route.back()->_right_child == grandparent_node) {
+                        route.back()->_right_child = parent_node;
+                    } else {
+                        route.back()->_left_child = parent_node;
+                    }
+                }
+                std::swap(grandparent_node->_is_black, parent_node->_is_black);
+                if(_root == grandparent_node) {
+                    _root = parent_node;
+                }
+            }
         }
     }
 };
