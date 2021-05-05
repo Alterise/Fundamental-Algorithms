@@ -1,20 +1,16 @@
 #include <iostream>
+#include <random>
 #include "RB_tree.h"
 #include "concrete_strategies.h"
 
 int main()
 {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distr(-50, 50);
     RB_tree<int> tree(new int_strategy);
-    tree.insert(3);
-    tree.insert(5);
-    tree.insert(8);
-    tree.insert(9);
-    tree.insert(20);
-    tree.insert(2);
-    tree.insert(1);
-    tree.insert(4);
-    tree.insert(6);
-    tree.insert(16);
-    tree.insert(7);
-    tree.insert(10);
+    for (int i = 0; i < 25; ++i) {
+        tree.insert(distr(gen));
+    }
+    tree.print();
 }
