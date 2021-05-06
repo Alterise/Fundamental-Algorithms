@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-#include <utility>
 #include "binary_tree.h"
 
 using std::cout;
@@ -48,7 +47,6 @@ public:
         node_print(_root);
         cout << endl;
     }
-
 
 private:
     template <typename J>
@@ -490,6 +488,7 @@ private:
             }
         }
     }
+
     void node_print(node<T>* current_node) {
         if (current_node == nullptr) {
             return;
