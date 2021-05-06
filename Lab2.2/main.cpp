@@ -7,7 +7,8 @@
 
 int main()
 {
-    const int N = 500;
+    srand(time(0));
+    const int N = 100;
     RB_tree<int> tree(new int_strategy);
     std::vector<int> buffer;
     std::vector<int> buffer2;
