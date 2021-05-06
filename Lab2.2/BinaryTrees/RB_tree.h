@@ -30,7 +30,7 @@ public:
         } else {
             std::vector<node<T>*> route;
             node_insert(_root, key, route);
-            tree_fix(route);
+            tree_fix_insertion(route);
             _root->_is_black = true;
         }
     }
@@ -46,6 +46,7 @@ public:
 
     void print() {
         node_print(_root);
+        cout << endl;
     }
 
 
@@ -100,7 +101,7 @@ private:
         }
     }
 
-    void tree_fix(std::vector<node<T>*>& route) {
+    void tree_fix_insertion(std::vector<node<T>*>& route) {
         if (route.size() < 3) {
             return;
         }
@@ -139,61 +140,87 @@ private:
             parent_node->_is_black = true;
             grandparent_node->_is_black = false;
             route.push_back(grandparent_node);
-            tree_fix(route);
+            tree_fix_insertion(route);
             return;
         }
         // Case 2: Uncle is black
-        if (uncle_is_black) {
+        else {
             // Case 2.1: Left parent
             if (grandparent_node->_left_child == parent_node) {
                 // Case 2.1.1: Right child
                 if (parent_node->_right_child == current_node) {
-                    grandparent_node->_left_child = current_node;
-                    parent_node->_right_child = current_node->_right_child;
-                    current_node->_right_child = parent_node->_left_child;
-                    parent_node->_left_child = current_node->_left_child;
+                    grandparent_node->_left_child = current_node->_right_child;
+                    parent_node->_right_child = current_node->_left_child;
                     current_node->_left_child = parent_node;
-                    std::swap(current_node, parent_node);
-                }
-                // Case 2.1.2: Left child | continuation of Case 2.1.1
-                grandparent_node->_left_child = parent_node->_right_child;
-                parent_node->_right_child = grandparent_node;
-                if (!route.empty()) {
-                    if (route.back()->_left_child == grandparent_node) {
-                        route.back()->_left_child = parent_node;
-                    } else {
-                        route.back()->_right_child = parent_node;
+                    current_node->_right_child = grandparent_node;
+                    grandparent_node->_is_black = !grandparent_node->_is_black;
+                    current_node->_is_black = !current_node->_is_black;
+                    if (!route.empty()) {
+                        if (route.back()->_left_child == grandparent_node) {
+                            route.back()->_left_child = current_node;
+                        } else {
+                            route.back()->_right_child = current_node;
+                        }
+                    }
+                    if (_root == grandparent_node) {
+                        _root = current_node;
                     }
                 }
-                std::swap(grandparent_node->_is_black, parent_node->_is_black);
-                if (_root == grandparent_node) {
-                    _root = parent_node;
+                // Case 2.1.2: Left child
+                else {
+                    grandparent_node->_left_child = parent_node->_right_child;
+                    parent_node->_right_child = grandparent_node;
+                    if (!route.empty()) {
+                        if (route.back()->_left_child == grandparent_node) {
+                            route.back()->_left_child = parent_node;
+                        } else {
+                            route.back()->_right_child = parent_node;
+                        }
+                    }
+                    grandparent_node->_is_black = !grandparent_node->_is_black;
+                    parent_node->_is_black = !parent_node->_is_black;
+                    if (_root == grandparent_node) {
+                        _root = parent_node;
+                    }
                 }
             }
             // Case 2.2: Right parent
             else {
                 // Case 2.2.1: Left child
                 if (parent_node->_left_child == current_node) {
-                    grandparent_node->_right_child = current_node;
-                    parent_node->_left_child = current_node->_left_child;
-                    current_node->_left_child = parent_node->_right_child;
-                    parent_node->_right_child = current_node->_right_child;
+                    grandparent_node->_right_child = current_node->_left_child;
+                    parent_node->_left_child = current_node->_right_child;
                     current_node->_right_child = parent_node;
-                    std::swap(current_node, parent_node);
-                }
-                // Case 2.2.2: Right child | continuation of Case 2.2.1
-                grandparent_node->_right_child = parent_node->_left_child;
-                parent_node->_left_child = grandparent_node;
-                if (!route.empty()) {
-                    if (route.back()->_right_child == grandparent_node) {
-                        route.back()->_right_child = parent_node;
-                    } else {
-                        route.back()->_left_child = parent_node;
+                    current_node->_left_child = grandparent_node;
+                    grandparent_node->_is_black = !grandparent_node->_is_black;
+                    current_node->_is_black = !current_node->_is_black;
+                    if (!route.empty()) {
+                        if (route.back()->_right_child == grandparent_node) {
+                            route.back()->_right_child = current_node;
+                        } else {
+                            route.back()->_left_child = current_node;
+                        }
+                    }
+                    if (_root == grandparent_node) {
+                        _root = current_node;
                     }
                 }
-                std::swap(grandparent_node->_is_black, parent_node->_is_black);
-                if (_root == grandparent_node) {
-                    _root = parent_node;
+                // Case 2.2.2: Right child
+                else {
+                    grandparent_node->_right_child = parent_node->_left_child;
+                    parent_node->_left_child = grandparent_node;
+                    if (!route.empty()) {
+                        if (route.back()->_right_child == grandparent_node) {
+                            route.back()->_right_child = parent_node;
+                        } else {
+                            route.back()->_left_child = parent_node;
+                        }
+                    }
+                    grandparent_node->_is_black = !grandparent_node->_is_black;
+                    parent_node->_is_black = !parent_node->_is_black;
+                    if (_root == grandparent_node) {
+                        _root = parent_node;
+                    }
                 }
             }
         }
@@ -205,12 +232,13 @@ private:
             route.pop_back();
             if ((current_node->_left_child != nullptr) && (current_node->_right_child != nullptr)) {
                 node<T>* node_to_replace = current_node;
-                current_node = current_node->_right_child;
-                while (current_node->_left_child != nullptr) {
+                route.push_back(current_node);
+                current_node = current_node->_left_child;
+                while (current_node->_right_child != nullptr) {
                     route.push_back(current_node);
-                    current_node = current_node->_left_child;
+                    current_node = current_node->_right_child;
                 }
-                *node_to_replace = *current_node;
+                node_to_replace->_data = current_node->_data;
             }
             node<T>* child_node;
             if (current_node->_left_child != nullptr) {
@@ -226,9 +254,12 @@ private:
                 _root = child_node;
                 return;
             }
-
             node<T>* parent_node = route.back();
-            route.pop_back();
+            if (parent_node->_left_child == current_node) {
+                parent_node->_left_child = child_node;
+            } else {
+                parent_node->_right_child = child_node;
+            }
             bool is_child_black;
             if (child_node != nullptr) {
                 is_child_black = child_node->_is_black;
@@ -237,121 +268,19 @@ private:
             }
             // Case 1: Different colors of removable node and it's parent
             if (is_child_black != current_node->_is_black) {
-                if (parent_node->_left_child == current_node) {
-                    parent_node->_left_child = child_node;
-                } else {
-                    parent_node->_right_child = child_node;
+                if (child_node != nullptr) {
+                    child_node->_is_black = true;
                 }
                 delete current_node;
                 return;
             }
-
-            node<T>* sibling_node;
-            if (parent_node->_left_child == current_node) {
-                sibling_node = parent_node->_right_child;
-            } else {
-                sibling_node = parent_node->_left_child;
+            // Case 2: Same colors of removable node and it's parent
+            else {
+                delete current_node;
+                route.push_back(child_node);
+                tree_fix_deletion(route);
             }
-            bool is_sibling_has_red_child = false;
-            if (sibling_node->_left_child != nullptr) {
-                if (!sibling_node->_left_child->_is_black) {
-                    is_sibling_has_red_child = true;
-                }
-            }
-            if (sibling_node->_right_child != nullptr) {
-                if (!sibling_node->_right_child->_is_black) {
-                    is_sibling_has_red_child = true;
-                }
-            }
-            //Case 2.1: Sibling is black and at least on of it's children is red
-            if (is_sibling_has_red_child) {
-                // Case 2.1.1: Left sibling
-                if(parent_node->_left_child == current_node) {
-                    // Case 2.1.1.1: Left child
-                    if (!sibling_node->_right_child->_is_black) {
-                        if (!sibling_node->_left_child->_is_black) {
-                            parent_node->_right_child = child_node;
-                            delete current_node;
-                            current_node = child_node;
-                            parent_node->_left_child = sibling_node->_right_child;
-                            sibling_node->_right_child = parent_node;
-                            sibling_node->_left_child->_is_black = true;
-                            if(_root == parent_node) {
-                                _root = sibling_node;
-                            } else {
-                                if (route.back()->_right_child == parent_node) {
-                                    route.back()->_right_child = sibling_node;
-                                } else {
-                                    route.back()->_left_child = sibling_node;
-                                }
-                            }
-                        }
-                    }
-                    // Case 2.1.1.2: Right child
-                    else {
-                        parent_node->_right_child = child_node;
-                        delete current_node;
-                        sibling_node->_right_child->_right_child = parent_node;
-                        parent_node->_left_child = nullptr;
-                        sibling_node->_right_child->_left_child = sibling_node;
-                        sibling_node->_right_child->_is_black = true;
-                        if(_root == parent_node) {
-                            _root = sibling_node->_right_child;
-                        } else {
-                            if (route.back()->_right_child == parent_node) {
-                                route.back()->_right_child = sibling_node->_right_child;
-                            } else {
-                                route.back()->_left_child = sibling_node->_right_child;
-                            }
-                        }
-                        sibling_node->_right_child = nullptr;
-                    }
-                }
-                // Case 2.1.2: Right sibling
-                else {
-                    // Case 2.1.2.1: Right child
-                    if (!sibling_node->_right_child->_is_black) {
-                        parent_node->_left_child = child_node;
-                        delete current_node;
-                        parent_node->_right_child = sibling_node->_left_child;
-                        sibling_node->_left_child = parent_node;
-                        sibling_node->_right_child->_is_black = true;
-                        if(_root == parent_node) {
-                            _root = sibling_node;
-                        } else {
-                            if (route.back()->_left_child == parent_node) {
-                                route.back()->_left_child = sibling_node;
-                            } else {
-                                route.back()->_right_child = sibling_node;
-                            }
-                        }
-                    }
-                    // Case 2.1.2.2: Left child
-                    else {
-                        parent_node->_left_child = child_node;
-                        delete current_node;
-                        sibling_node->_left_child->_left_child = parent_node;
-                        parent_node->_right_child = nullptr;
-                        sibling_node->_left_child->_right_child = sibling_node;
-                        sibling_node->_left_child->_is_black = true;
-                        if(_root == parent_node) {
-                            _root = sibling_node->_left_child;
-                        } else {
-                            if (route.back()->_left_child == parent_node) {
-                                route.back()->_left_child = sibling_node->_left_child;
-                            } else {
-                                route.back()->_right_child = sibling_node->_left_child;
-                            }
-                        }
-                        sibling_node->_left_child = nullptr;
-                    }
-                }
-            }
-            // TODO:
-            // Case 2.2: Sibling is black and it's both children are black
-            // Case 2.3: Sibling is red
-
-
+            _root->_is_black = true;
         } else if (this->_comparator->compare(key, current_node->_data) < 0) {
             if (current_node->_left_child == nullptr) {
                 return;
@@ -363,6 +292,186 @@ private:
                 return;
             } else {
                 node_remove(current_node->_right_child, key, route);
+            }
+        }
+    }
+
+    void tree_fix_deletion(std::vector<node<T>*>& route) {
+        if (route.size() < 2) {
+            return;
+        }
+        node<T>* current_node = route.back();
+        route.pop_back();
+        node<T>* parent_node = route.back();
+        route.pop_back();
+        node<T>* sibling_node;
+        if (parent_node->_left_child == current_node) {
+            sibling_node = parent_node->_right_child;
+        } else {
+            sibling_node = parent_node->_left_child;
+        }
+        bool is_sibling_has_red_child = false;
+        bool is_left_child_red = false;
+        bool is_right_child_red = false;
+        if (sibling_node->_left_child != nullptr) {
+            if (!sibling_node->_left_child->_is_black) {
+                is_sibling_has_red_child = true;
+                is_left_child_red = true;
+            }
+        }
+        if (sibling_node->_right_child != nullptr) {
+            if (!sibling_node->_right_child->_is_black) {
+                is_sibling_has_red_child = true;
+                is_right_child_red = true;
+            }
+        }
+        //Case 2.1: Sibling is black and at least on of it's children is red
+        if (is_sibling_has_red_child) {
+            // Case 2.1.1: Left sibling
+            if (parent_node->_right_child == current_node) {
+                // Case 2.1.1.1: Left child
+                if (is_left_child_red) {
+                    if (!sibling_node->_left_child->_is_black) {
+                        parent_node->_left_child = sibling_node->_right_child;
+                        sibling_node->_right_child = parent_node;
+                        sibling_node->_left_child->_is_black = true;
+                        if(!parent_node->_is_black) {
+                            parent_node->_is_black = true;
+                            sibling_node->_is_black = false;
+                        }
+                        if (_root == parent_node) {
+                            _root = sibling_node;
+                        } else {
+                            if (route.back()->_right_child == parent_node) {
+                                route.back()->_right_child = sibling_node;
+                            } else {
+                                route.back()->_left_child = sibling_node;
+                            }
+                        }
+                    }
+                }
+                // Case 2.1.1.2: Right child
+                else {
+                    parent_node->_left_child = sibling_node->_right_child->_right_child;
+                    sibling_node->_right_child->_right_child = parent_node;
+                    node<T>* tmp = sibling_node->_right_child->_left_child;
+                    sibling_node->_right_child->_left_child = sibling_node;
+                    if(parent_node->_is_black) {
+                        sibling_node->_right_child->_is_black = true;
+                    } else {
+                        parent_node->_is_black = true;
+                    }
+                    parent_node->_is_black = true;
+                    if (_root == parent_node) {
+                        _root = sibling_node->_right_child;
+                    } else {
+                        if (route.back()->_right_child == parent_node) {
+                            route.back()->_right_child = sibling_node->_right_child;
+                        } else {
+                            route.back()->_left_child = sibling_node->_right_child;
+                        }
+                    }
+                    sibling_node->_right_child = tmp;
+                }
+            }
+            // Case 2.1.2: Right sibling
+            else {
+                // Case 2.1.2.1: Right child
+                if (is_right_child_red) {
+                    parent_node->_right_child = sibling_node->_left_child;
+                    sibling_node->_left_child = parent_node;
+                    sibling_node->_right_child->_is_black = true;
+                    if(!parent_node->_is_black) {
+                        parent_node->_is_black = true;
+                        sibling_node->_is_black = false;
+                    }
+                    if (_root == parent_node) {
+                        _root = sibling_node;
+                    } else {
+                        if (route.back()->_left_child == parent_node) {
+                            route.back()->_left_child = sibling_node;
+                        } else {
+                            route.back()->_right_child = sibling_node;
+                        }
+                    }
+                }
+                // Case 2.1.2.2: Left child
+                else {
+                    parent_node->_right_child = sibling_node->_left_child->_left_child;
+                    sibling_node->_left_child->_left_child = parent_node;
+                    node<T>* tmp = sibling_node->_left_child->_right_child;
+                    sibling_node->_left_child->_right_child = sibling_node;
+                    if(parent_node->_is_black) {
+                        sibling_node->_left_child->_is_black = true;
+                    } else {
+                        parent_node->_is_black = true;
+                    }
+                    if (_root == parent_node) {
+                        _root = sibling_node->_left_child;
+                    } else {
+                        if (route.back()->_left_child == parent_node) {
+                            route.back()->_left_child = sibling_node->_left_child;
+                        } else {
+                            route.back()->_right_child = sibling_node->_left_child;
+                        }
+                    }
+                    sibling_node->_left_child = tmp;
+                }
+            }
+            return;
+        }
+        // Case 2.2: Sibling is black and it's both children are black
+        else if (sibling_node->_is_black) {
+            sibling_node->_is_black = false;
+            if (parent_node->_is_black) {
+                route.push_back(parent_node);
+                tree_fix_deletion(route);
+            } else {
+                parent_node->_is_black = true;
+            }
+            return;
+        }
+        // Case 2.3: Sibling is red
+        else {
+            // Case 2.3.1: Left sibling
+            if (parent_node->_right_child == current_node) {
+                parent_node->_left_child = sibling_node->_right_child;
+                sibling_node->_right_child = parent_node;
+                sibling_node->_is_black = true;
+                parent_node->_is_black = false;
+                if (!route.empty()) {
+                    if (route.back()->_right_child == parent_node) {
+                        route.back()->_right_child = sibling_node;
+                    } else {
+                        route.back()->_left_child = sibling_node;
+                    }
+                } else {
+                    _root = sibling_node;
+                }
+                route.push_back(sibling_node);
+                route.push_back(parent_node);
+                route.push_back(current_node);
+                tree_fix_deletion(route);
+            }
+            // Case 2.3.2: Right sibling
+            else {
+                parent_node->_right_child = sibling_node->_left_child;
+                sibling_node->_left_child = parent_node;
+                sibling_node->_is_black = true;
+                parent_node->_is_black = false;
+                if (!route.empty()) {
+                    if (route.back()->_left_child == parent_node) {
+                        route.back()->_left_child = sibling_node;
+                    } else {
+                        route.back()->_right_child = sibling_node;
+                    }
+                } else {
+                    _root = sibling_node;
+                }
+                route.push_back(sibling_node);
+                route.push_back(parent_node);
+                route.push_back(current_node);
+                tree_fix_deletion(route);
             }
         }
     }
