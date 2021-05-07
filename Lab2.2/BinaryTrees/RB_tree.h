@@ -2,15 +2,13 @@
 #include <vector>
 #include "binary_tree.h"
 
-using std::cout;
-using std::endl;
-
 template <typename T>
 class RB_tree : public binary_tree<T>
 {
 private:
     template <typename J> class node;
     node<T>* _root;
+
 public:
     explicit RB_tree(strategy<T>* comparator, bool allow_duplicates = true) : binary_tree<T>(comparator, allow_duplicates) {
         _root = nullptr;
@@ -45,7 +43,7 @@ public:
 
     void print() {
         node_print(_root);
-        cout << endl;
+        std::cout << std::endl;
     }
 
 private:
@@ -58,6 +56,7 @@ private:
             _left_child = left_child;
             _right_child = right_child;
         }
+
         J _data;
         node<J>* _left_child;
         node<J>* _right_child;
@@ -494,7 +493,7 @@ private:
             return;
         }
         node_print(current_node->_left_child);
-        cout << current_node->_data << " ";
+        std::cout << current_node->_data << " ";
         node_print(current_node->_right_child);
     }
 };

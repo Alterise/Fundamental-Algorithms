@@ -1,5 +1,5 @@
 #pragma once
-#include "../Strategies/strategy.h"
+#include "strategy.h"
 
 template<typename T>
 class binary_tree
@@ -8,6 +8,10 @@ public:
 	explicit binary_tree(strategy<T>* comparator, bool allow_duplicates) {
 		_comparator = comparator;
 		_allow_duplicates = allow_duplicates;
+	}
+
+    ~binary_tree() {
+	    delete _comparator;
 	}
 
 	virtual void insert(const T&) = 0;
