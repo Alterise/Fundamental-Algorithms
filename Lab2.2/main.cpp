@@ -7,8 +7,10 @@
 #include "relation.h"
 #include "messages.h"
 #include "message_parser.h"
+#include "documents.h"
+#include "document_parser.h"
 
-const int CURRENT_TEST = 3;
+const int CURRENT_TEST = 4;
 
 int main() {
     // RB Tree test
@@ -89,4 +91,21 @@ int main() {
         }
     }
 
+    if (CURRENT_TEST == 4) {
+        std::vector<Document> documents;
+        documents = parse_documents("input2.txt");
+        relation<Document> rel(new documents_strategy);
+        for (const auto &document : documents) {
+            rel.insert(document);
+        }
+        int id = rel.insert_tree(new RB_tree<Document*> (new documents_ptr_strategy_id, false));
+        rel.insert_tree(new RB_tree<Document*> (new documents_ptr_strategy_date, false));
+        rel.insert_tree(new RB_tree<Document*> (new documents_ptr_strategy_cost, false));
+        auto ptr = rel.search(id, documents[1]);
+        if (ptr != nullptr) {
+            std::cout << ptr->patronymic << std::endl;
+        } else {
+            std::cout << "No" << std::endl;
+        }
+    }
 }
