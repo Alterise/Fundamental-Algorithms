@@ -1,7 +1,7 @@
 #include <iostream>
-#include <stdlib.h>
+#include <cstdlib>
 #include <vector>
-#include <time.h>
+#include <ctime>
 #include "RB_tree.h"
 #include "concrete_strategies.h"
 #include "relation.h"
@@ -10,7 +10,7 @@
 #include "documents.h"
 #include "document_parser.h"
 
-const int CURRENT_TEST = 4;
+const int CURRENT_TEST = 1;
 
 int main() {
     // RB Tree test
