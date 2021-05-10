@@ -10,7 +10,7 @@
 #include "documents.h"
 #include "document_parser.h"
 
-const int CURRENT_TEST = 4;
+const int CURRENT_TEST = 2;
 
 int main() {
     // RB Tree test
@@ -68,7 +68,6 @@ int main() {
         rel.remove(11);
         rel.remove(2);
         rel.remove(15);
-        std::cout << 1;
     }
 
     // Message class test
