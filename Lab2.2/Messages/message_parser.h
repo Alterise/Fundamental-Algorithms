@@ -19,6 +19,7 @@ std::vector<Message> parse_messages(const std::string& filename) {
         line_stream >> current_message.date.month;
         line_stream.ignore(1);
         line_stream >> current_message.date.year;
+        line_stream.ignore(1);
         getline(line_stream, current_message.name, ':');
         line_stream.ignore(1);
         getline(line_stream, current_message.data);

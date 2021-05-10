@@ -10,7 +10,7 @@
 #include "documents.h"
 #include "document_parser.h"
 
-const int CURRENT_TEST = 2;
+const int CURRENT_TEST = 4;
 
 int main() {
     // RB Tree test
@@ -82,9 +82,21 @@ int main() {
         rel.insert_tree(new RB_tree<Message*> (new message_ptr_strategy_username, false));
         int id_by_data = rel.insert_tree(new RB_tree<Message*> (new message_ptr_strategy_data, false));
         rel.insert_tree(new RB_tree<Message*> (new message_ptr_strategy_username_date, false));
-        auto ptr = rel.search(id_by_data, {{},"","Hello John"});
+        auto ptr = rel.search(id_by_data, {{},"","Hello Adam"});
+        auto ptr2 = rel.search(id_by_data, {{},"","Hello John"});
+        auto ptr3 = rel.search(id_by_data, {{},"","Hello Valera"});
         if (ptr != nullptr) {
             std::cout << ptr->name << std::endl;
+        } else {
+            std::cout << "No" << std::endl;
+        }
+        if (ptr2 != nullptr) {
+            std::cout << ptr2->name << std::endl;
+        } else {
+            std::cout << "No" << std::endl;
+        }
+        if (ptr3 != nullptr) {
+            std::cout << ptr3->name << std::endl;
         } else {
             std::cout << "No" << std::endl;
         }
@@ -101,8 +113,14 @@ int main() {
         rel.insert_tree(new RB_tree<Document*> (new documents_ptr_strategy_date, false));
         rel.insert_tree(new RB_tree<Document*> (new documents_ptr_strategy_cost, false));
         auto ptr = rel.search(id, documents[1]);
+        auto ptr2 = rel.search(id, documents[0]);
         if (ptr != nullptr) {
             std::cout << ptr->patronymic << std::endl;
+        } else {
+            std::cout << "No" << std::endl;
+        }
+        if (ptr2 != nullptr) {
+            std::cout << ptr2->patronymic << std::endl;
         } else {
             std::cout << "No" << std::endl;
         }
