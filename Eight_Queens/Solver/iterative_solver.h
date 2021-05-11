@@ -32,14 +32,12 @@ public:
         straight_diagonals = diagonals_tmp;
         back_diagonals = diagonals_tmp;
         diagonals_filling(8);
-        std::vector<std::vector<bool>> current_field;
         std::vector<int> queens_y = {0, 1, 2, 3, 4, 5, 6, 7};
         std::vector<QueenInfo> queens_info;
         do {
             queens_info = queens_info_filling(queens_y);
             if (queens_info.size() == 8) {
-                current_field = place_queens(queens_info);
-                solutions.insert(current_field);
+                solutions.insert(place_queens(queens_info));
             }
         } while (std::next_permutation(queens_y.begin(), queens_y.end()));
         return solutions;

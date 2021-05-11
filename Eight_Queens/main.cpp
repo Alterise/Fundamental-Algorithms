@@ -14,10 +14,11 @@ int main() {
     solutions = i_solver.solve();
     auto end = std::chrono::steady_clock::now();
     std::chrono::duration<double> elapsed_time = end - start;
+    std::cout << "Solutions count: " << solutions.size() << std::endl;
     std::cout << "time passed (iterative): " << elapsed_time.count() << "s\n";
 //    for (const auto &solution : solutions) {
-//        for (int i = 0; i < 7; ++i) {
-//            for (int j = 0; j < 7; ++j) {
+//        for (int i = 0; i < 8; ++i) {
+//            for (int j = 0; j < 8; ++j) {
 //                std::cout << solution[i][j] << " ";
 //            }
 //            std::cout << std::endl;
@@ -25,13 +26,14 @@ int main() {
 //        std::cout << std::endl << std::endl;
 //    }
     start = std::chrono::steady_clock::now();
-//    solutions = r_solver.solve();
+    solutions = r_solver.solve();
     end = std::chrono::steady_clock::now();
     elapsed_time = end - start;
+    std::cout << "Solutions count: " << solutions.size() << std::endl;
     std::cout << "time passed (recursive): " << elapsed_time.count() << "s\n";
 //    for (const auto &solution : solutions) {
-//        for (int i = 0; i < 7; ++i) {
-//            for (int j = 0; j < 7; ++j) {
+//        for (int i = 0; i < 8; ++i) {
+//            for (int j = 0; j < 8; ++j) {
 //                std::cout << solution[i][j] << " ";
 //            }
 //            std::cout << std::endl;
