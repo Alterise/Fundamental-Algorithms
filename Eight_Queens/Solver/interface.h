@@ -2,5 +2,5 @@
 #include <vector>
 
 class solver {
-    virtual std::vector<std::vector<std::vector<bool>, bool> solve() = 0;
+    virtual std::set<std::vector<std::vector<bool>>> solve() = 0;
 };
