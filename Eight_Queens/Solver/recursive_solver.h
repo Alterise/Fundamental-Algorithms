@@ -13,10 +13,15 @@ public:
         diagonals_filling(8);
         std::vector<QueenInfo> queens_info;
 
-
+        std::set<int> x_s = {0, 1, 2, 3, 4, 5, 6, 7};
+        std::set<int> y_s = {0, 1, 2, 3, 4, 5, 6, 7};
         for (int i = 0; i < 8; ++i) {
             for (int j = 0; j < 8; ++j) {
-                recursive_queens_info_filling(queens_info, j, i, solutions, 0);
+                x_s.erase(j);
+                y_s.erase(i);
+                recursive_queens_info_filling(queens_info, j, i, solutions, 0, x_s, y_s);
+                x_s.insert(j);
+                y_s.insert(i);
             }
         }
         return solutions;
@@ -31,8 +36,9 @@ private:
     }
 
     void recursive_queens_info_filling (std::vector<QueenInfo> queens_info, int x, int y,
-                                                          std::set<std::vector<std::vector<bool>>>& solutions, int depth) {
-        if (depth >= 8) {
+                                        std::set<std::vector<std::vector<bool>>>& solutions, int depth,
+                                        std::set<int> x_s, std::set<int> y_s) {
+        if (depth >= 7) {
             return;
         }
         QueenInfo current_queen_info;
@@ -46,9 +52,13 @@ private:
                 solutions.insert(place_queens(queens_info));
                 return;
             }
-            for (int i = 0; i < 8; ++i) {
-                for (int j = 0; j < 8; ++j) {
-                    recursive_queens_info_filling(queens_info, j, i, solutions, depth + 1);
+            for (const auto &i : y_s) {
+                for (const auto &j : x_s) {
+                    auto new_x_s = x_s;
+                    new_x_s.erase(j);
+                    auto new_y_s = y_s;
+                    new_y_s.erase(i);
+                    recursive_queens_info_filling(queens_info, j, i, solutions, 0, new_x_s, new_y_s);
                 }
             }
         }
