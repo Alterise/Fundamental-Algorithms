@@ -14,5 +14,4 @@ public:
 
 protected:
     realisation_class* _realisation;
-    bool _is_self_realisation;
 };

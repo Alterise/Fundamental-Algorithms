@@ -31,13 +31,13 @@ int main() {
     elapsed_time = end - start;
     std::cout << "Solutions count: " << solutions.size() << std::endl;
     std::cout << "time passed (recursive): " << elapsed_time.count() << "s\n";
-//    for (const auto &solution : solutions) {
-//        for (int i = 0; i < 8; ++i) {
-//            for (int j = 0; j < 8; ++j) {
-//                std::cout << solution[i][j] << " ";
-//            }
-//            std::cout << std::endl;
-//        }
-//        std::cout << std::endl << std::endl;
-//    }
+    for (const auto &solution : solutions) {
+        for (int i = 0; i < 8; ++i) {
+            for (int j = 0; j < 8; ++j) {
+                std::cout << solution[i][j] << " ";
+            }
+            std::cout << std::endl;
+        }
+        std::cout << std::endl << std::endl;
+    }
 }

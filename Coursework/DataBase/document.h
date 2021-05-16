@@ -3,7 +3,7 @@
 #include <string>
 #include "date.h"
 
-struct document {
+struct Document {
     long long ID; // 1
     int fiscal_year;
     std::string tax_authority; // 2
