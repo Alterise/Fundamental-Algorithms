@@ -4,7 +4,7 @@
 #include "date.h"
 
 struct Document {
-    long long ID; // 1
+    long long id; // 1
     int fiscal_year;
     std::string tax_authority; // 2
     int tax_authority_id; // 2
@@ -17,7 +17,7 @@ struct Document {
 
     std::vector<std::string> citizenship;
 
-    int passport_id; // 4
+    long long passport_id; // 4
     Date passport_date_of_issue;
 
     int postal_code;
