@@ -51,6 +51,12 @@ public:
         std::cout << std::endl;
     }
 
+    T* dumb_search(const T& key, strategy<T>* comparator) {
+        auto node_tmp = node_dumb_search(_root, const T& key, comparator);
+        delete comparator;
+        return node_tmp;
+    }
+
 private:
     template <typename J>
     class node {
@@ -78,6 +84,22 @@ private:
             return node_search(current_node->_left_child, key);
         } else {
             return node_search(current_node->_right_child, key);
+        }
+    }
+
+    T* node_dumb_search(node<T>* current_node, const T& key, strategy<T>* comparator) {
+        if (current_node == nullptr) {
+            return nullptr;
+        }
+        T* needed_node = node_dumb_search(current_node->_left_child, key, comparator);
+        if (needed_node != nullptr) {
+            return needed_node;
+        } else {
+            if (comparator->compare(current_node) == 0) {
+                return current_node;
+            } else {
+                return node_dumb_search(current_node->_right_child, key, comparator);
+            }
         }
     }
 

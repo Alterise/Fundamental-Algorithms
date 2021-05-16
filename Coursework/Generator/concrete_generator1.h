@@ -1,16 +1,15 @@
-#include "generator_interface.h"
-#include "date.h"
+#pragma once
+#include "abstract_generator.h"
 
-class generator1 : public generator_interface {
-public:
-    ~generator1() {
+class concrete_generator1 : public abstract_generator {
+    ~concrete_generator1() override {
 
     }
-    Document generate() {
-        document current_document;
 
-        return current_document;
-    };
+    Document* generate() override {
+        return new Document {123, 51};
+    }
+
 private:
     long long generate_long_long(int length) {
 

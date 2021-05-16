@@ -1,12 +1,11 @@
-#include "generator_interface.h"
+#include "abstract_generator.h"
 
-class generator2 : public generator_interface {
-    ~generator2() {
+class concrete_generator2 : public abstract_generator {
+    ~concrete_generator2() {
         // Put your implementation here
     }
-    Document generate() {
-        document current_document;
+
+    Document *generate() {
         // Put your implementation here
-        return current_document;
-    };
+    }
 };
