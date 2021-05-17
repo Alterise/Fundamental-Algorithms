@@ -1,6 +1,4 @@
 #include <iostream>
-#include <random>
-#include <ctime>
 #include "concrete_generator_factory1.h"
 
 int main() {
@@ -8,7 +6,7 @@ int main() {
     const auto generator = factory->create_generator();
     auto current_document = generator->generate();
 
-
+    delete current_document;
     delete generator;
     delete factory;
     return 0;

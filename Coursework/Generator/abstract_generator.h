@@ -4,5 +4,5 @@
 class abstract_generator {
 public:
     virtual ~abstract_generator() = default;
-    virtual Document generate() = 0;
+    virtual Document* generate() = 0;
 };

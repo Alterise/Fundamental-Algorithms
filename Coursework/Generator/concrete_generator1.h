@@ -12,28 +12,52 @@ public:
         random_engine = random_engine_tmp;
     }
 
-    Document generate() override {
-        Document current_document;
-        current_document.id = generate_long_long(100000000000, 999999999999);
-        current_document.birth_date = generate_date(1901, 2006);
-        current_document.fiscal_year = generate_int(current_document.birth_date.year + 14, 2020);
-        current_document.filling_date = generate_date(current_document.fiscal_year + 1, 2021);
-        current_document.tax_authority;
-        current_document.tax_authority_id = generate_int(1, 2000);
-        current_document.surname;
-        current_document.name;
-        current_document.patronymic;
-        current_document.gender = generate_gender();
-        current_document.citizenship;
-        current_document.passport_id = generate_long_long(1000000000, 9999999999);
-        current_document.passport_date_of_issue = generate_date(current_document.birth_date.year + 14, 2021);
-        current_document.postal_code = generate_int(100000, 999999);
-        current_document.country;
-        current_document.region;
-        current_document.city;
-        current_document.street;
-        current_document.house_number = generate_int(1, 200);
-        current_document.apartment_number = generate_int(1, 1000);
+    Document* generate() override {
+        auto current_document = new Document;
+        current_document->id = generate_long_long(100000000000, 999999999999);
+        current_document->birth_date = generate_date(1901, 2006);
+        current_document->fiscal_year = generate_int(current_document->birth_date.year + 14, 2020);
+        current_document->filling_date = generate_date(current_document->fiscal_year + 1, 2021);
+        current_document->tax_authority = generate_tax_authority();
+        current_document->tax_authority_id = generate_int(1, 5000);
+        current_document->surname = generate_type<std::string>({"Smith", "Johnson", "Williams", "Brown", "Jones",
+                                                                       "Davis", "Taylor", "Martin", "Lee", "Lewis",
+                                                                       "Walker", "Moore", "Jackson", "Robinson", "Thompson"});
+        current_document->gender = generate_type<char>({'M', 'F'});
+        if (current_document->gender == 'M') {
+            current_document->name = generate_type<std::string>({"James", "Robert", "John", "Michael", "William",
+                                                                 "David", "Richard", "Joseph", "Thomas", "Charles",
+                                                                 "Christopher", "Daniel", "Matthew", "Anthony", "Mark"});
+        } else {
+            current_document->name = generate_type<std::string>({"Mary", "Patricia", "Jennifer", "Linda", "Elizabeth",
+                                                                 "Barbara", "Susan", "Jessica", "Sarah", "Karen",
+                                                                 "Nancy", "Lisa", "Betty", "Margaret", "Sandra"});
+        }
+        current_document->patronymic = generate_type<std::string>({"James", "Robert", "John", "Michael", "William",
+                                                                   "David", "Richard", "Joseph", "Thomas", "Charles",
+                                                                   "Christopher", "Daniel", "Matthew", "Anthony", "Mark"});
+        if (current_document->gender == 'M') {
+            current_document->patronymic += "ovich";
+        } else {
+            current_document->patronymic += "ovna";
+        }
+        current_document->citizenship;
+        current_document->passport_id = generate_long_long(1000000000, 9999999999);
+        current_document->passport_date_of_issue = generate_date(current_document->birth_date.year + 14, 2021);
+        current_document->postal_code = generate_int(100000, 999999);
+        current_document->country = generate_type<std::string>({"Ambrosia", "Avalon", "Narnia", "Atlantis", "El Dorado",
+                                                                       "Laputa", "Loompaland", "Neverland", "Utopia", "Val Verde",
+                                                                       "Wonderland", "Zubrovka", "Wakanda", "Vulgaria", "Tazbekistan",
+                                                                       "San Serriffe", "Shangri-La", "Qumar", "Isle of Naboombu", "Costaguana"});
+        current_document->region = generate_type<std::string>({"North", "South", "East", "West",
+                                                                      "North-East", "North-West", "South-East", "South-West"});
+        current_document->city = generate_type<std::string>({"Springfield", "Gotham", "Twin Peaks", "Midgar", "Valhalla",
+                                                             "Metropolis", "Mordor", "Hell", "Bikini Bottom", "Myst",
+                                                             "Bluffington", "Arkham", "New New York", "Atlantis", "Hogsmeade",
+                                                             "Wellsville", "Vice City", "Silent Hill", "New Vegas", "Venusville"});
+        current_document->street = generate_type<std::string>({"a"});
+        current_document->house_number = generate_int(1, 200);
+        current_document->apartment_number = generate_int(1, 1000);
         return current_document;
     }
 
@@ -60,48 +84,31 @@ private:
         } else {
             right_day_border = 31;
         }
-        std::uniform_int_distribution<int> day_distribution(0, right_day_border);
+        std::uniform_int_distribution<int> day_distribution(1, right_day_border);
         tmp.day = day_distribution(random_engine);
+        return tmp;
     }
 
     std::string generate_tax_authority() {
-
+        std::uniform_int_distribution<int> distribution(0, 15);
+        std::string authority;
+        std::vector<std::string> first_part = {"Office", "Department", "Bureau", "House", "Affiliate"};
+        std::vector<std::string> second_part = {"Something", "Anything", "Everything", "Nothing"};
+        std::vector<std::string> third_part = {"Amazing", "Awful", "Important", "Terrifying", "International",
+                                               "Annoying", "Depressing", "Evil", "Mysterious", "Stupid", "Tiring"};
+        authority = "The " + first_part[distribution(random_engine) % first_part.size()] + " of " +
+                    second_part[distribution(random_engine) % second_part.size()] + " " +
+                    third_part[distribution(random_engine) % third_part.size()];
+        return authority;
     }
 
-    std::string generate_name() {
-
+    template<typename T>
+    T generate_type(const std::vector<T>& options) {
+        std::uniform_int_distribution<int> distribution(0, (int)options.size() - 1);
+        return options[distribution(random_engine)];
     }
 
-    std::string generate_surname() {
-
-    }
-
-    std::string generate_patronymic() {
-
-    }
-
-    char generate_gender() {
-        std::uniform_int_distribution<int> distribution(0, 1);
-        if (distribution(random_engine)) {
-            return 'M';
-        } else {
-            return 'F';
-        }
-    }
-
-    std::string generate_country() {
-
-    }
-
-    std::string generate_region() {
-
-    }
-
-    std::string generate_city() {
-
-    }
-
-    std::string generate_street() {
+    std::string generate_sitizenship() {
 
     }
 };
