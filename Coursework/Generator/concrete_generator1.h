@@ -41,7 +41,10 @@ public:
         } else {
             current_document->patronymic += "ovna";
         }
-        current_document->citizenship;
+        current_document->citizenship = generate_citizenship({"Ambrosia", "Avalon", "Narnia", "Atlantis", "El Dorado",
+                                                              "Laputa", "Loompaland", "Neverland", "Utopia", "Val Verde",
+                                                              "Wonderland", "Zubrovka", "Wakanda", "Vulgaria", "Tazbekistan",
+                                                              "San Serriffe", "Shangri-La", "Qumar", "Isle of Naboombu", "Costaguana"});
         current_document->passport_id = generate_long_long(1000000000, 9999999999);
         current_document->passport_date_of_issue = generate_date(current_document->birth_date.year + 14, 2021);
         current_document->postal_code = generate_int(100000, 999999);
@@ -55,7 +58,7 @@ public:
                                                              "Metropolis", "Mordor", "Hell", "Bikini Bottom", "Myst",
                                                              "Bluffington", "Arkham", "New New York", "Atlantis", "Hogsmeade",
                                                              "Wellsville", "Vice City", "Silent Hill", "New Vegas", "Venusville"});
-        current_document->street = generate_type<std::string>({"a"});
+        current_document->street = generate_street();
         current_document->house_number = generate_int(1, 200);
         current_document->apartment_number = generate_int(1, 1000);
         return current_document;
@@ -102,13 +105,52 @@ private:
         return authority;
     }
 
+    std::string generate_street() {
+        std::uniform_int_distribution<int> distribution(0, 15);
+        std::string street;
+        std::vector<std::string> first_part = {"Airport", "Water", "Barn", "Bay", "Bus",
+                                               "Central", "China", "Corn", "Delta", "Dimitri",
+                                               "Democracy", "Technology", "Flower", "Forest", "Gateway",
+                                               "Greenpark", "Impressionist", "Innovation", "Industry", "Museum",
+                                               "Old Port", "Plaza", "River", "Shopping", "Swamp"};
+        std::vector<std::string> second_part = {"Street", "Avenue", "Road", "Lane", "Drive"};
+        street = first_part[distribution(random_engine) % first_part.size()] + " " +
+                 second_part[distribution(random_engine) % second_part.size()];
+        return street;
+    }
+
     template<typename T>
     T generate_type(const std::vector<T>& options) {
         std::uniform_int_distribution<int> distribution(0, (int)options.size() - 1);
         return options[distribution(random_engine)];
     }
 
-    std::string generate_sitizenship() {
-
+    std::vector<std::string> generate_citizenship(const std::vector<std::string>& options) {
+        std::vector<std::string> citizenship;
+        std::uniform_int_distribution<int> distribution(0, (int)options.size() - 1);
+        std::uniform_int_distribution<int> count_distribution(1, 100);
+        auto count_checker = count_distribution(random_engine);
+        if (count_checker > 0) {
+            int a, b, c;
+            do {
+                a = distribution(random_engine);
+                b = distribution(random_engine);
+                c = distribution(random_engine);
+            } while (a == b || a == c || c == b);
+            citizenship.push_back(options[a]);
+            citizenship.push_back(options[b]);
+            citizenship.push_back(options[c]);
+        } else if (count_checker > 80) {
+            int a, b;
+            do {
+                a = distribution(random_engine);
+                b = distribution(random_engine);
+            } while (a == b);
+            citizenship.push_back(options[a]);
+            citizenship.push_back(options[b]);
+        } else {
+            citizenship.push_back(options[distribution(random_engine)]);
+        }
+        return citizenship;
     }
 };
