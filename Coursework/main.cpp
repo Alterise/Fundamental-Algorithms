@@ -4,19 +4,22 @@
 #include <random>
 #include <ctime>
 #include "concrete_generator_factory1.h"
+#include "concrete_strategies.h"
+#include "RB_tree.h"
+
 
 int main() {
     const auto factory = new generator_factory1;
     const auto generator = factory->create_generator();
-    auto current_document = generator->generate();
+    Document* current_document;
+    RB_tree<Document> tree(new documents_strategy, false);
 
-    delete current_document;
-
-    std::vector<Document*> buffer;
     auto start = std::chrono::steady_clock::now();
-    const int N = 50;
+    const int N = 50000;
+
     for (int i = 0; i < N; ++i) {
         current_document = generator->generate();
+        tree.insert(*current_document);
 //        std::cout << "Document " + std::to_string(i) + " generated" << std::endl;
         delete current_document;
 //        buffer.push_back(current_document);

@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <chrono>
 #include "binary_tree.h"
 
 template <typename T>
@@ -15,10 +16,15 @@ public:
     }
 
     ~RB_tree() {
-        node_clear(_root);
+        auto start = std::chrono::steady_clock::now();
         if (_root != nullptr) {
+            node_clear(_root);
             delete _root;
+            _root = nullptr;
         }
+        auto end = std::chrono::steady_clock::now();
+        std::chrono::duration<double> elapsed_time = end - start;
+        std::cout << "Destruction has taken: " << elapsed_time.count() << "s" << std::endl;
     }
 
     bool insert(const T& key) override {
@@ -52,7 +58,7 @@ public:
     }
 
     T* dumb_search(const T& key, strategy<T>* comparator) {
-        auto node_tmp = node_dumb_search(_root, const T& key, comparator);
+        auto node_tmp = node_dumb_search(_root, key, comparator);
         delete comparator;
         return node_tmp;
     }
@@ -112,6 +118,7 @@ private:
             if (current_node->_left_child == nullptr) {
                 current_node->_left_child = new node<T>(key);
                 route.push_back(current_node->_left_child);
+                return true;
             } else {
                 return node_insert(current_node->_left_child, key, route);
             }
@@ -119,6 +126,7 @@ private:
             if (current_node->_right_child == nullptr) {
                 current_node->_right_child = new node<T>(key);
                 route.push_back(current_node->_right_child);
+                return true;
             } else {
                 return node_insert(current_node->_right_child, key, route);
             }
@@ -310,13 +318,13 @@ private:
             if (current_node->_left_child == nullptr) {
                 return false;
             } else {
-                node_remove(current_node->_left_child, key, route);
+                return node_remove(current_node->_left_child, key, route);
             }
         } else {
             if (current_node->_right_child == nullptr) {
                 return false;
             } else {
-                node_remove(current_node->_right_child, key, route);
+                return node_remove(current_node->_right_child, key, route);
             }
         }
     }
@@ -502,17 +510,15 @@ private:
     }
 
     void node_clear(node<T>* current_node) {
-        if (current_node == nullptr) {
-            return;
-        } else {
+        if (current_node->_left_child != nullptr) {
             node_clear(current_node->_left_child);
+            delete current_node->_left_child;
+            current_node->_left_child = nullptr;
+        }
+        if (current_node->_right_child != nullptr) {
             node_clear(current_node->_right_child);
-            if (current_node->_left_child != nullptr) {
-                delete current_node->_left_child;
-            }
-            if (current_node->_right_child != nullptr) {
-                delete current_node->_right_child;
-            }
+            delete current_node->_right_child;
+            current_node->_right_child = nullptr;
         }
     }
 
