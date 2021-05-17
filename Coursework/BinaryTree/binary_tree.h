@@ -10,10 +10,7 @@ public:
 		_allow_duplicates = allow_duplicates;
 	}
 
-    ~binary_tree() {
-	    delete _comparator;
-	}
-
+    virtual ~binary_tree() = default;
 	virtual bool insert(const T&) = 0;
 	virtual bool remove(const T&) = 0;
 	virtual T* search(const T&) = 0;

@@ -1,45 +1,38 @@
 #include <iostream>
 #include <chrono>
 #include <vector>
-#include <random>
-#include <ctime>
-#include "concrete_generator_factory1.h"
 #include "concrete_strategies.h"
-#include "RB_tree.h"
-
+#include "DataBase.h"
+#include "map_implementation.h"
+#include "RB_tree_implementation.h"
 
 int main() {
-    const auto factory = new generator_factory1;
-    const auto generator = factory->create_generator();
-    Document* current_document;
-    RB_tree<Document> tree(new documents_strategy, false);
-
+    data_base data_base(new map_realisation);
     auto start = std::chrono::steady_clock::now();
-    const int N = 50000;
-
-    for (int i = 0; i < N; ++i) {
-        current_document = generator->generate();
-        tree.insert(*current_document);
-//        std::cout << "Document " + std::to_string(i) + " generated" << std::endl;
-        delete current_document;
-//        buffer.push_back(current_document);
+    data_base.generate(50000);
+    auto filling_date_strategy = new documents_filling_date_strategy;
+    Document current_document;
+    current_document.filling_date = {22, 02, 2020};
+    auto ptr = data_base.search(current_document, filling_date_strategy);
+    if (ptr != nullptr) {
+        std::cout << ptr->name << std::endl;
+    } else {
+        std::cout << "NO" << std::endl;
     }
+
+    data_base.remove(*ptr);
+    ptr = data_base.search(current_document, filling_date_strategy);
+    if (ptr != nullptr) {
+        std::cout << ptr->name << std::endl;
+    } else {
+        std::cout << "NO" << std::endl;
+    }
+    delete filling_date_strategy;
+
+
     auto end = std::chrono::steady_clock::now();
     std::chrono::duration<double> elapsed_time = end - start;
     std::cout << "time passed: " << elapsed_time.count() << "s" << std::endl;
-//    for (const auto &item : buffer) {
-//        delete item;
-//    }
 
-    Document key;
-    key.filling_date = {22, 02, 2020};
-    auto ptr = tree.dumb_search(key, new documents_filling_date_strategy);
-    if (ptr != nullptr) {
-        std::cout << ptr->name;
-    } else {
-        std::cout << "NO";
-    }
-    delete generator;
-    delete factory;
     return 0;
 }

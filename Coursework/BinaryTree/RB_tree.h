@@ -15,12 +15,13 @@ public:
         _root = nullptr;
     }
 
-    ~RB_tree() {
+    ~RB_tree() override {
         if (_root != nullptr) {
             node_clear(_root);
             delete _root;
             _root = nullptr;
         }
+        delete this->_comparator;
     }
 
     bool insert(const T& key) override {
@@ -55,7 +56,6 @@ public:
 
     T* dumb_search(const T& key, strategy<T>* comparator) {
         auto node_tmp = node_dumb_search(_root, key, comparator);
-        delete comparator;
         return node_tmp;
     }
 
