@@ -7,7 +7,7 @@
 
 class documents_strategy : public strategy<Document> {
 public:
-    int compare(const Document& lhs, const Document& rhs) override {
+    long long compare(const Document& lhs, const Document& rhs) override {
         if (lhs.id != rhs.id) {
             return lhs.id - rhs.id;
         } else if (lhs.fiscal_year != rhs.fiscal_year) {
@@ -61,7 +61,7 @@ public:
 
 class documents_id_strategy : public strategy<Document> {
 public:
-    int compare(const Document& lhs, const Document& rhs) override {
+    long long compare(const Document& lhs, const Document& rhs) override {
         if (lhs.id != rhs.id) {
             return lhs.id - rhs.id;
         } else {
@@ -72,7 +72,7 @@ public:
 
 class documents_tax_authority_strategy : public strategy<Document> {
 public:
-    int compare(const Document& lhs, const Document& rhs) override {
+    long long compare(const Document& lhs, const Document& rhs) override {
         if (lhs.tax_authority_id != rhs.tax_authority_id) {
             return lhs.tax_authority_id - rhs.tax_authority_id;
         } else if (lhs.tax_authority != rhs.tax_authority) {
@@ -85,7 +85,7 @@ public:
 
 class documents_full_name_strategy : public strategy<Document> {
 public:
-    int compare(const Document& lhs, const Document& rhs) override {
+    long long compare(const Document& lhs, const Document& rhs) override {
         if (lhs.name != rhs.name) {
             return lhs.name < rhs.name ? -1 : 1;
         } else if (lhs.surname != rhs.surname) {
@@ -100,7 +100,7 @@ public:
 
 class documents_passport_id_strategy : public strategy<Document> {
 public:
-    int compare(const Document& lhs, const Document& rhs) override {
+    long long compare(const Document& lhs, const Document& rhs) override {
         if (lhs.passport_id != rhs.passport_id) {
             return lhs.passport_id - rhs.passport_id;
         } else {
@@ -111,7 +111,7 @@ public:
 
 class documents_filling_date_strategy : public strategy<Document> {
 public:
-    int compare(const Document& lhs, const Document& rhs) override {
+    long long compare(const Document& lhs, const Document& rhs) override {
         if (lhs.filling_date != rhs.filling_date) {
             return lhs.filling_date < rhs.filling_date ? -1 : 1;
         } else {

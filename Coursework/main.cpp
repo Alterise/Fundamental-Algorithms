@@ -31,6 +31,14 @@ int main() {
 //        delete item;
 //    }
 
+    Document key;
+    key.filling_date = {22, 02, 2020};
+    auto ptr = tree.dumb_search(key, new documents_filling_date_strategy);
+    if (ptr != nullptr) {
+        std::cout << ptr->name;
+    } else {
+        std::cout << "NO";
+    }
     delete generator;
     delete factory;
     return 0;

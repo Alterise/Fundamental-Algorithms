@@ -4,5 +4,5 @@ template<typename T>
 class strategy
 {
 public:
-    virtual int compare(const T&, const T&) = 0;
+    virtual long long compare(const T&, const T&) = 0;
 };

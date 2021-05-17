@@ -16,15 +16,11 @@ public:
     }
 
     ~RB_tree() {
-        auto start = std::chrono::steady_clock::now();
         if (_root != nullptr) {
             node_clear(_root);
             delete _root;
             _root = nullptr;
         }
-        auto end = std::chrono::steady_clock::now();
-        std::chrono::duration<double> elapsed_time = end - start;
-        std::cout << "Destruction has taken: " << elapsed_time.count() << "s" << std::endl;
     }
 
     bool insert(const T& key) override {
@@ -101,8 +97,8 @@ private:
         if (needed_node != nullptr) {
             return needed_node;
         } else {
-            if (comparator->compare(current_node) == 0) {
-                return current_node;
+            if (comparator->compare(current_node->_data, key) == 0) {
+                return &(current_node->_data);
             } else {
                 return node_dumb_search(current_node->_right_child, key, comparator);
             }
