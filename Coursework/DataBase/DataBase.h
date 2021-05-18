@@ -42,9 +42,9 @@ public:
         if (_buffered_element == nullptr) {
             return false;
         } else {
+            statistics.remove(*_buffered_element);
             auto tmp = _realisation->remove(*_buffered_element);
             _buffered_element = nullptr;
-            statistics.remove(*_buffered_element);
             return tmp;
         }
     }
