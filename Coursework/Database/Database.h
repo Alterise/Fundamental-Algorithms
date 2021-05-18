@@ -14,6 +14,7 @@ private:
 public:
     explicit data_base(realisation_class* realisation) {
         _realisation = realisation;
+        _buffered_element = nullptr;
     }
 
     ~data_base() {
@@ -60,7 +61,6 @@ public:
         for (int i = 0; i < count; ++i) {
             current_document = generator->generate();
             insert(*current_document);
-            statistics.insert(*current_document);
             delete current_document;
         }
         delete generator;

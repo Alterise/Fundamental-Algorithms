@@ -45,16 +45,16 @@ struct Document {
         for (const auto &item : document.citizenship) {
                 stream << "    " << item << std::endl;
         }
-        stream << "Passport ID: " << std::endl
-               << "Passport date of issue: " << document.id << std::endl
-               << "Postal code: " << document.fiscal_year << std::endl
-               << "Country: " << document.gender << std::endl
-               << "Region: " << document.gender << std::endl
-               << "City: " << document.gender << std::endl
-               << "Street: " << document.gender << std::endl
-               << "House number: " << document.gender << std::endl
-               << "Apartment number: " << document.gender << std::endl
-               << "Filling date: " << document.gender << std::endl;
+        stream << "Passport ID: " << document.passport_id << std::endl
+               << "Passport date of issue: " << document.passport_date_of_issue << std::endl
+               << "Postal code: " << document.postal_code << std::endl
+               << "Country: " << document.country << std::endl
+               << "Region: " << document.region << std::endl
+               << "City: " << document.city << std::endl
+               << "Street: " << document.street << std::endl
+               << "House number: " << document.house_number << std::endl
+               << "Apartment number: " << document.apartment_number << std::endl
+               << "Filling date: " << document.filling_date << std::endl;
         return stream;
     }
 };

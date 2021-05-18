@@ -49,123 +49,123 @@ public:
         if (id_stat.find(current_document.id) != id_stat.end()) {
             id_stat[current_document.id]++;
         } else {
-            id_stat.insert({current_document.id, 0});
+            id_stat.insert({current_document.id, 1});
         }
 
         if (fiscal_year_stat.find(current_document.fiscal_year) != fiscal_year_stat.end()) {
             fiscal_year_stat[current_document.fiscal_year]++;
         } else {
-            fiscal_year_stat.insert({current_document.fiscal_year, 0});
+            fiscal_year_stat.insert({current_document.fiscal_year, 1});
         }
 
         if (tax_authority_stat.find(current_document.tax_authority) != tax_authority_stat.end()) {
             tax_authority_stat[current_document.tax_authority]++;
         } else {
-            tax_authority_stat.insert({current_document.tax_authority, 0});
+            tax_authority_stat.insert({current_document.tax_authority, 1});
         }
 
         if (tax_authority_id_stat.find(current_document.tax_authority_id) != tax_authority_id_stat.end()) {
             tax_authority_id_stat[current_document.tax_authority_id]++;
         } else {
-            tax_authority_id_stat.insert({current_document.tax_authority_id, 0});
+            tax_authority_id_stat.insert({current_document.tax_authority_id, 1});
         }
 
         if (surname_stat.find(current_document.surname) != surname_stat.end()) {
             surname_stat[current_document.surname]++;
         } else {
-            surname_stat.insert({current_document.surname, 0});
+            surname_stat.insert({current_document.surname, 1});
         }
 
         if (name_stat.find(current_document.name) != name_stat.end()) {
             name_stat[current_document.name]++;
         } else {
-            name_stat.insert({current_document.name, 0});
+            name_stat.insert({current_document.name, 1});
         }
 
         if (patronymic_stat.find(current_document.patronymic) != patronymic_stat.end()) {
             patronymic_stat[current_document.patronymic]++;
         } else {
-            patronymic_stat.insert({current_document.patronymic, 0});
+            patronymic_stat.insert({current_document.patronymic, 1});
         }
 
         if (birth_date_stat.find(current_document.birth_date) != birth_date_stat.end()) {
             birth_date_stat[current_document.birth_date]++;
         } else {
-            birth_date_stat.insert({current_document.birth_date, 0});
+            birth_date_stat.insert({current_document.birth_date, 1});
         }
 
         if (gender_stat.find(current_document.gender) != gender_stat.end()) {
             gender_stat[current_document.gender]++;
         } else {
-            gender_stat.insert({current_document.gender, 0});
+            gender_stat.insert({current_document.gender, 1});
         }
 
         for (const auto &item : current_document.citizenship) {
             if (citizenship_stat.find(item) != citizenship_stat.end()) {
                 citizenship_stat[item]++;
             } else {
-                citizenship_stat.insert({item, 0});
+                citizenship_stat.insert({item, 1});
             }
         }
 
         if (passport_id_stat.find(current_document.passport_id) != passport_id_stat.end()) {
             passport_id_stat[current_document.passport_id]++;
         } else {
-            passport_id_stat.insert({current_document.passport_id, 0});
+            passport_id_stat.insert({current_document.passport_id, 1});
         }
 
         if (passport_date_of_issue_stat.find(current_document.passport_date_of_issue) != passport_date_of_issue_stat.end()) {
             passport_date_of_issue_stat[current_document.passport_date_of_issue]++;
         } else {
-            passport_date_of_issue_stat.insert({current_document.passport_date_of_issue, 0});
+            passport_date_of_issue_stat.insert({current_document.passport_date_of_issue, 1});
         }
 
         if (postal_code_stat.find(current_document.postal_code) != postal_code_stat.end()) {
             postal_code_stat[current_document.postal_code]++;
         } else {
-            postal_code_stat.insert({current_document.postal_code, 0});
+            postal_code_stat.insert({current_document.postal_code, 1});
         }
 
         if (country_stat.find(current_document.country) != country_stat.end()) {
             country_stat[current_document.country]++;
         } else {
-            country_stat.insert({current_document.country, 0});
+            country_stat.insert({current_document.country, 1});
         }
 
         if (region_stat.find(current_document.region) != region_stat.end()) {
             region_stat[current_document.region]++;
         } else {
-            region_stat.insert({current_document.region, 0});
+            region_stat.insert({current_document.region, 1});
         }
 
         if (city_stat.find(current_document.city) != city_stat.end()) {
             city_stat[current_document.city]++;
         } else {
-            city_stat.insert({current_document.city, 0});
+            city_stat.insert({current_document.city, 1});
         }
 
         if (street_stat.find(current_document.street) != street_stat.end()) {
             street_stat[current_document.street]++;
         } else {
-            street_stat.insert({current_document.street, 0});
+            street_stat.insert({current_document.street, 1});
         }
 
         if (house_number_stat.find(current_document.house_number) != house_number_stat.end()) {
             house_number_stat[current_document.house_number]++;
         } else {
-            house_number_stat.insert({current_document.house_number, 0});
+            house_number_stat.insert({current_document.house_number, 1});
         }
 
         if (apartment_number_stat.find(current_document.apartment_number) != apartment_number_stat.end()) {
             apartment_number_stat[current_document.apartment_number]++;
         } else {
-            apartment_number_stat.insert({current_document.apartment_number, 0});
+            apartment_number_stat.insert({current_document.apartment_number, 1});
         }
 
         if (filling_date_stat.find(current_document.filling_date) != filling_date_stat.end()) {
             filling_date_stat[current_document.filling_date]++;
         } else {
-            filling_date_stat.insert({current_document.filling_date, 0});
+            filling_date_stat.insert({current_document.filling_date, 1});
         }
     }
 
