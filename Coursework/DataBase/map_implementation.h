@@ -1,10 +1,10 @@
 #pragma once
 #include <map>
 #include <iostream>
+#include <random>
+#include <ctime>
 #include "implementation.h"
 #include "document.h"
-#include "concrete_generator_factory1.h"
-#include "concrete_strategies.h"
 
 class map_realisation : public realisation_class {
 private:
@@ -46,22 +46,6 @@ public:
             }
         }
         return false;
-    }
-
-    void generate(int count) override {
-        const auto factory = new generator_factory1;
-        const auto generator = factory->create_generator();
-        Document* current_document;
-
-        for (int i = 0; i < count; ++i) {
-
-            current_document = generator->generate();
-            insert(*current_document);
-            delete current_document;
-        }
-
-        delete generator;
-        delete factory;
     }
 
 private:

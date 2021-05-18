@@ -1,4 +1,6 @@
 #pragma once
+#include <iostream>
+#include <iomanip>
 
 struct Date {
     int day;
@@ -26,5 +28,12 @@ struct Date {
     }
     bool operator!=(const Date& rhs) const {
         return !(*this == rhs);
+    }
+
+    friend std::ostream& operator<<(std::ostream& stream, const Date& date) {
+        stream << std::setfill('0') << std::setw(2) << date.day << "/" <<
+                  std::setfill('0') << std::setw(2) << date.month << "/" <<
+                  std::setfill('0') << std::setw(4) << date.year;
+        return stream;
     }
 };
