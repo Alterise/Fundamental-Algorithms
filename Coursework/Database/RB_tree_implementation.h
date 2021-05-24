@@ -6,7 +6,7 @@
 #include "concrete_generator_factory1.h"
 #include "strategy.h"
 
-class RB_tree_implementation : public realisation_class {
+class RB_tree_implementation : public implementation_class {
 private:
     RB_tree<Document>* _tree;
 public:

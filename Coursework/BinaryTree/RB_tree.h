@@ -49,11 +49,6 @@ public:
         return node_search(_root, key);
     }
 
-    void print() {
-        node_print(_root);
-        std::cout << std::endl;
-    }
-
     T* dumb_search(const T& key, strategy<T>* comparator) {
         auto node_tmp = node_dumb_search(_root, key, comparator);
         return node_tmp;
@@ -516,14 +511,5 @@ private:
             delete current_node->_right_child;
             current_node->_right_child = nullptr;
         }
-    }
-
-    void node_print(node<T>* current_node) {
-        if (current_node == nullptr) {
-            return;
-        }
-        node_print(current_node->_left_child);
-        std::cout << current_node->_data << " ";
-        node_print(current_node->_right_child);
     }
 };

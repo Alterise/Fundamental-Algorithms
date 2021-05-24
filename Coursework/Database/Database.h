@@ -9,10 +9,10 @@ class data_base
 public:
     statistics_table statistics;
 private:
-    realisation_class* _realisation;
+    implementation_class* _realisation;
     Document* _buffered_element;
 public:
-    explicit data_base(realisation_class* realisation) {
+    explicit data_base(implementation_class* realisation) {
         _realisation = realisation;
         _buffered_element = nullptr;
     }
@@ -55,14 +55,19 @@ public:
     }
 
     void generate(int count) {
-        const auto factory = new generator_factory1;
+        std::vector<Document> vec;
+        vec.reserve(count);
+        const auto factory = new concrete_generator_factory1;
         const auto generator = factory->create_generator();
         Document* current_document;
+
         for (int i = 0; i < count; ++i) {
             current_document = generator->generate();
             insert(*current_document);
+            vec.push_back(*current_document);
             delete current_document;
         }
+
         delete generator;
         delete factory;
     }
