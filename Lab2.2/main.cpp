@@ -3,6 +3,7 @@
 #include <vector>
 #include <ctime>
 #include "RB_tree.h"
+#include "AVL_tree.h"
 #include "concrete_strategies.h"
 #include "relation.h"
 #include "messages.h"
@@ -17,7 +18,7 @@ int main() {
     if (CURRENT_TEST == 1) {
         srand(time(0));
         const int N = 100;
-        RB_tree<int> tree(new int_strategy);
+        AVL_tree<int> tree(new int_strategy);
         std::vector<int> buffer;
         std::vector<int> buffer2;
         for (int i = 0; i < N; ++i) {
@@ -44,11 +45,11 @@ int main() {
     if (CURRENT_TEST == 2) {
         relation<int> rel(new int_strategy);
         rel.insert(5);
-        rel.insert_tree(new RB_tree<int*>(new int_ptr_strategy, false));
-        rel.insert_tree(new RB_tree<int*>(new int_ptr_strategy_reverse, false));
+        rel.insert_tree(new AVL_tree<int*>(new int_ptr_strategy, false));
+        rel.insert_tree(new AVL_tree<int*>(new int_ptr_strategy_reverse, false));
         rel.insert(2);
         rel.insert(11);
-        int id = rel.insert_tree(new RB_tree<int*>(new int_ptr_strategy_odd_first, false));
+        int id = rel.insert_tree(new AVL_tree<int*>(new int_ptr_strategy_odd_first, false));
         rel.insert(15);
         auto ptr = rel.search(id, 8);
         if (ptr != nullptr) {
@@ -75,13 +76,13 @@ int main() {
         std::vector<Message> messages;
         messages = parse_messages("input.txt");
         relation<Message> rel(new message_strategy);
-        int id_by_date = rel.insert_tree(new RB_tree<Message*> (new message_ptr_strategy_date, false));
+        int id_by_date = rel.insert_tree(new AVL_tree<Message*> (new message_ptr_strategy_date, false));
         for (const auto &message : messages) {
             rel.insert(message);
         }
-        rel.insert_tree(new RB_tree<Message*> (new message_ptr_strategy_username, false));
-        int id_by_data = rel.insert_tree(new RB_tree<Message*> (new message_ptr_strategy_data, false));
-        rel.insert_tree(new RB_tree<Message*> (new message_ptr_strategy_username_date, false));
+        rel.insert_tree(new AVL_tree<Message*> (new message_ptr_strategy_username, false));
+        int id_by_data = rel.insert_tree(new AVL_tree<Message*> (new message_ptr_strategy_data, false));
+        rel.insert_tree(new AVL_tree<Message*> (new message_ptr_strategy_username_date, false));
         auto ptr = rel.search(id_by_data, {{},"","Hello Adam"});
         auto ptr2 = rel.search(id_by_data, {{},"","Hello John"});
         auto ptr3 = rel.search(id_by_data, {{},"","Hello Valera"});
@@ -109,9 +110,9 @@ int main() {
         for (const auto &document : documents) {
             rel.insert(document);
         }
-        int id = rel.insert_tree(new RB_tree<Document*> (new documents_ptr_strategy_id, false));
-        rel.insert_tree(new RB_tree<Document*> (new documents_ptr_strategy_date, false));
-        rel.insert_tree(new RB_tree<Document*> (new documents_ptr_strategy_cost, false));
+        int id = rel.insert_tree(new AVL_tree<Document*> (new documents_ptr_strategy_id, false));
+        rel.insert_tree(new AVL_tree<Document*> (new documents_ptr_strategy_date, false));
+        rel.insert_tree(new AVL_tree<Document*> (new documents_ptr_strategy_cost, false));
         auto ptr = rel.search(id, documents[1]);
         auto ptr2 = rel.search(id, documents[0]);
         if (ptr != nullptr) {

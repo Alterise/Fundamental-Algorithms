@@ -5,6 +5,8 @@
 
 int main() {
     data_base current_data_base(new map_implementation);
+    
     while(menu(current_data_base));
+    
     return 0;
 }
